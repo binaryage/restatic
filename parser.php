@@ -3,6 +3,8 @@
 // var_dump($_SERVER['argv']);
 
 require_once 'libs/spyc-0.5/spyc.php';
+require_once 'GooDataExtractor.php';
+
 define("CONF_FILE", 'goopages.yml');
 
 $args = $_SERVER['argv'];
@@ -16,6 +18,4 @@ if(file_exists($source . '/' . 'goopages.yml')) {
 	die("Config file doesnt exists");
 }
 
-var_dump($config);
-
-echo 'Source dir ' . $args[1] . ' target dir ' . $args[2] . PHP_EOL;
+var_dump(GooDataExtractor::parseContentToArray($config['googleSpreadSheetKey'], $config['sheetsIds']));
