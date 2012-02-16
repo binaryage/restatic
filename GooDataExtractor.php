@@ -29,13 +29,31 @@ class GooDataExtractor {
 		return $sheets;
 	}
 
-	public static function parseContentToArray($key, $sheets) {
+	protected static function parseContentToArray($key, $sheets) {
 		$sheets = self::mineData($key, $sheets);
 		$data = array();
 
 		if(is_array($sheets)) {
 			foreach($sheets as $sheet) {
 				$data[] = self::atomToArray($sheet);
+			}
+		}
+
+		return $data;
+	}
+
+	public static function extract($key, $sheets, $delimiters) {
+		$importedData = self::parseContentToArray($key, $sheets);
+
+		$delimiters = str_replace(' ', '', $delimiters);
+		$delimiters = explode(',', $delimiters);
+
+		$data = array();
+		foreach($importedData as $sheet) {
+			foreach($sheet as $title => $sheetElems) {
+				foreach($sheetElems as $celCode => $elem) {
+					$data[$delimiters[0] . $title . '-' . $celCode . $delimiters[1]] = $elem;;
+				}
 			}
 		}
 

@@ -18,4 +18,6 @@ if(file_exists($source . '/' . 'goopages.yml')) {
 	die("Config file doesnt exists");
 }
 
-var_dump(GooDataExtractor::parseContentToArray($config['googleSpreadSheetKey'], $config['sheetsIds']));
+$importedData = GooDataExtractor::extract($config['googleSpreadSheetKey'], $config['sheetsIds'], $config['delimiter']);
+
+var_dump($importedData);
