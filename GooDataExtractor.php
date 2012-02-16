@@ -8,18 +8,25 @@ class GooDataExtractor {
 		
 		if(is_array($sheets)) {
 			foreach($sheets as $sheet) {
-				$link = 'https://docs.google.com/spreadsheet/pub?hl=en_US&hl=en_US&key=' . $key . '&output=csv&gid=' . $sheet;
-
+				$sheet = (int)$sheet;
+				$link = 'http://spreadsheets.google.com/feeds/cells/' . $key . '/' . $sheet . '/public/values';
 				$result[] = file_get_contents($link);
 			}
 		}
+
 		return $result;		
 	}
 
-	protected static function csvToArray($file, $delimiter) { 
-		echo '------------------------------------------------------------------------' . PHP_EOL;
-		var_dump($file);
-		echo '------------------------------------------------------------------------' . PHP_EOL;
+	protected static function atomToArray($data) {
+		$sheets = array();
+		$data = simplexml_load_string($data);
+
+		$sheetTitle = $data->title->__toString();
+		foreach($data->entry as $entry) {
+			$sheets[$sheetTitle][$entry->title->__toString()] = $entry->content->__toString();
+		}
+
+		return $sheets;
 	}
 
 	public static function parseContentToArray($key, $sheets) {
@@ -28,7 +35,7 @@ class GooDataExtractor {
 
 		if(is_array($sheets)) {
 			foreach($sheets as $sheet) {
-				$data[] = self::csvToArray($sheet, ',');
+				$data[] = self::atomToArray($sheet);
 			}
 		}
 
