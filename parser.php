@@ -1,9 +1,12 @@
 <?php
 
-// var_dump($_SERVER['argv']);
-
+// Tools
 require_once 'libs/spyc-0.5/spyc.php';
+require_once 'libs/NFinder/Finder.php';
+
+// Own classes
 require_once 'GooDataExtractor.php';
+require_once 'FilesDataParser.php';
 
 define("CONF_FILE", 'goopages.yml');
 
@@ -19,5 +22,6 @@ if(file_exists($source . '/' . 'goopages.yml')) {
 }
 
 $importedData = GooDataExtractor::extract($config['googleSpreadSheetKey'], $config['sheetsIds'], $config['delimiter']);
+$filesToParse = FilesDataParser::indexAndParseFolder($source, $target, $config['delimiter'], $importedData);
 
-var_dump($importedData);
+echo 'Parsing done - enjoy your new site! Its stored in ' . $target . PHP_EOL;

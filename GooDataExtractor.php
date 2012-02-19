@@ -1,6 +1,24 @@
 <?php
 
 class GooDataExtractor {
+	public static function extract($key, $sheets, $delimiters) {
+		$importedData = self::parseContentToArray($key, $sheets);
+
+		$delimiters = str_replace(' ', '', $delimiters);
+		$delimiters = explode(',', $delimiters);
+
+		$data = array();
+		foreach($importedData as $sheet) {
+			foreach($sheet as $title => $sheetElems) {
+				foreach($sheetElems as $celCode => $elem) {
+					$data[$delimiters[0] . $title . '-' . $celCode . $delimiters[1]] = $elem;;
+				}
+			}
+		}
+
+		return $data;
+	}
+
 	protected static function mineData($key, $sheets) {
 		$sheets = str_replace(' ', '', $sheets);
 		$sheets = explode(',', $sheets);
@@ -36,24 +54,6 @@ class GooDataExtractor {
 		if(is_array($sheets)) {
 			foreach($sheets as $sheet) {
 				$data[] = self::atomToArray($sheet);
-			}
-		}
-
-		return $data;
-	}
-
-	public static function extract($key, $sheets, $delimiters) {
-		$importedData = self::parseContentToArray($key, $sheets);
-
-		$delimiters = str_replace(' ', '', $delimiters);
-		$delimiters = explode(',', $delimiters);
-
-		$data = array();
-		foreach($importedData as $sheet) {
-			foreach($sheet as $title => $sheetElems) {
-				foreach($sheetElems as $celCode => $elem) {
-					$data[$delimiters[0] . $title . '-' . $celCode . $delimiters[1]] = $elem;;
-				}
 			}
 		}
 
