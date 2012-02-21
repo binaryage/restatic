@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * @author Jan Palounek
+ * @project Restatic
+ * @company BinaryAge
+ * @license BSD License 
+ */
+ 
 // Tools
 require_once 'libs/spyc-0.5/spyc.php';
 require_once 'libs/NFinder/Finder.php';

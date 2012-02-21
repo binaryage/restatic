@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * @author Jan Palounek
+ * @project Restatic
+ * @company BinaryAge
+ * @license BSD License 
+ */
 class FilesDataParser {
 	public static function indexAndParseFolder($folder, $target, $delimiter, $data) {
 		self::copyFolder($folder, $target);
@@ -35,7 +41,7 @@ class FilesDataParser {
 		$result = array();
 
 		$cellsToParse = array_keys($data);
-		echo PHP_EOL . 'Parsing started. ' . PHP_EOL;
+		echo PHP_EOLč . 'Parsing started. ' . PHP_EOL;
 
 		foreach($files as $file) {
 			$fileName = $file;

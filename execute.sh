@@ -1,14 +1,14 @@
 #!/bin/bash
 
 if [ $# -lt 1 ] ; then
-        echo "Usage: parse google docs spreadsheet content using <COMMAND> source_folder target_folder"
+        echo "Usage: parse google docs spreadsheet content using 'restatic source_folder target_folder'"
         echo 
-        echo "By Binaryage.com, for more info see projects homepage - goopages.binaryage.com or github wiki"
+        echo "By Binaryage.com, for more info see projects homepage - restatic.binaryage.com or github wiki"
         echo " git@github.com:JPalounek/goopages.git"
         exit 1
 fi
 
-echo "Goopages started parsing html files from $1 to $2."
+echo "Restatic started parsing html files from $1 to $2."
 
 if [ -d $1 ]
 then

@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * @author Jan Palounek
+ * @project Restatic
+ * @company BinaryAge
+ * @license BSD License 
+ */
 class GooDataExtractor {
 	public static function extract($key, $sheets, $delimiters) {
 		$importedData = self::parseContentToArray($key, $sheets);
