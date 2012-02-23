@@ -22,10 +22,18 @@ $source = $args[1];
 $target = $args[2];
 
 // @todo Check if last char is not /
-if(file_exists($source . '/' . 'goopages.yml')) {
+if(file_exists($source . '/' . 'restatic.yml')) {
 	$config = Spyc::YAMLLoad($source . '/' . CONF_FILE);
 } else {
-	die("Config file doesnt exists");
+	die("Config file doesnt exists" . PHP_EOL);
+}
+
+if(!isset($config['delimiter'])) {
+	$config['delimiter'] = '/-, -/';
+}
+
+if(!isset($config['sheetsIds'])) {
+	$config['sheetsIds'] = '1, 2, 3';
 }
 
 $importedData = GooDataExtractor::extract($config['googleSpreadSheetKey'], $config['sheetsIds'], $config['delimiter']);
