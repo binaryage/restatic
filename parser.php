@@ -15,19 +15,33 @@ require_once 'libs/NFinder/Finder.php';
 require_once 'GooDataExtractor.php';
 require_once 'FilesDataParser.php';
 
-define("CONF_FILE", 'goopages.yml');
+// Constants
+define("CONF_FILE", 'restatic.yml');
 
+// Fill source and target with input data
 $args = $_SERVER['argv'];
 $source = $args[1];
 $target = $args[2];
 
-// @todo Check if last char is not /
-if(file_exists($source . '/' . 'restatic.yml')) {
+// Cut ending slashes from folder names
+if(substr($source, -1) == '/') {
+	$source = substr($source, 0, -1);
+}
+
+if(substr($target, -1) == '/') {
+	$source = substr($source, 0, -1);
+}
+
+echo PHP_EOL;
+
+// Config file - load and parse
+if(file_exists($source . '/' . CONF_FILE)) {
 	$config = Spyc::YAMLLoad($source . '/' . CONF_FILE);
 } else {
 	die("Config file doesnt exists" . PHP_EOL);
 }
 
+// Default variables setting - if it wasn't set in config file
 if(!isset($config['delimiter'])) {
 	$config['delimiter'] = '/-, -/';
 }
@@ -36,6 +50,7 @@ if(!isset($config['sheetsIds'])) {
 	$config['sheetsIds'] = '1, 2, 3';
 }
 
+// Extract and parse data
 $importedData = GooDataExtractor::extract($config['googleSpreadSheetKey'], $config['sheetsIds'], $config['delimiter']);
 $filesToParse = FilesDataParser::indexAndParseFolder($source, $target, $config['delimiter'], $importedData);
 
