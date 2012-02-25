@@ -1,5 +1,2 @@
-cd ~/bin
-rm -rf restatic
-
-cd /usr/sbin
-rm restatic
+rm -rf ~/bin/restatic
+unlink /usr/sbin/restatic
