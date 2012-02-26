@@ -15,7 +15,7 @@ fi
 if [ $1 == "-d" ]
 then
 	echo "${COL_RED} Restatic started parsing html files from actual location to _site. ${COL_NORM}"
-	php parser.php "." "_site"
+	php ~/bin/restatic/parser.php . _site
 else
 	if [ -d $1 ]
 	then
