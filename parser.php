@@ -24,20 +24,21 @@ $source = $args[1];
 $target = $args[2];
 
 // Cut ending slashes from folder names
-if(substr($source, -1) == '/') {
-	$source = substr($source, 0, -1);
+if(substr($source, -1) != '/') {
+	$source = $source . '/';
 }
 
-if(substr($target, -1) == '/') {
-	$source = substr($source, 0, -1);
+if(substr($target, -1) != '/') {
+	$target = $target . '/';
 }
 
 echo PHP_EOL;
 
 // Config file - load and parse
-if(file_exists($source . '/' . CONF_FILE)) {
-	$config = Spyc::YAMLLoad($source . '/' . CONF_FILE);
+if(file_exists($source . '' . CONF_FILE)) {
+	$config = Spyc::YAMLLoad($source . '' . CONF_FILE);
 } else {
+	echo "Conf file from " . $source . '' . CONF_FILE . PHP_EOL;
 	die("Config file doesnt exists" . PHP_EOL);
 }
 
