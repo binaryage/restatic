@@ -16,6 +16,7 @@ if [ $1 == "-d" ]
 then
 	echo "${COL_RED} Restatic started parsing html files from actual location to _site. ${COL_NORM}"
 	php ~/.restatic/parser.php . _site
+	rm -rf _site/.git/
 else
 	if [ -d $1 ]
 	then
@@ -23,6 +24,7 @@ else
 		then
 			echo "${COL_RED} Restatic started parsing html files from $1 to $2. ${COL_NORM}"
 			php ~/.restatic/parser.php $1 $2
+			rm -rf $2/.git/
 		else
 			echo "Target dir doesnt exists."
 		fi
