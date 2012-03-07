@@ -47,12 +47,8 @@ if(!isset($config['delimiter'])) {
 	$config['delimiter'] = '/-, -/';
 }
 
-if(!isset($config['sheetsIds'])) {
-	$config['sheetsIds'] = '1, 2, 3';
-}
-
 // Extract and parse data
-$importedData = GooDataExtractor::extract($config['googleSpreadSheetKey'], $config['sheetsIds'], $config['delimiter']);
+$importedData = GooDataExtractor::extract($config['googleSpreadSheetKey'], $config['delimiter']);
 $filesToParse = FilesDataParser::indexAndParseFolder($source, $target, $config['delimiter'], $importedData);
 
 echo 'Parsing done - enjoy your new site! Its stored in ' . $target . PHP_EOL;

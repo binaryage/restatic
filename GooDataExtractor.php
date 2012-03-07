@@ -7,7 +7,7 @@
  * @license BSD License 
  */
 class GooDataExtractor {
-	public static function extract($key, $sheets, $delimiters) {
+	public static function extract($key, $delimiters) {
 		$importedData = self::parseContentToArray($key, $sheets);
 
 		$delimiters = str_replace(' ', '', $delimiters);
@@ -25,20 +25,28 @@ class GooDataExtractor {
 		return $data;
 	}
 
-	protected static function mineData($key, $sheets) {
-		$sheets = str_replace(' ', '', $sheets);
-		$sheets = explode(',', $sheets);
+	protected static function mineData($key) {
 		$result = array();
 		
-		if(is_array($sheets)) {
-			foreach($sheets as $sheet) {
-				$sheet = (int)$sheet;
-				$link = 'http://spreadsheets.google.com/feeds/cells/' . $key . '/' . $sheet . '/public/values';
+		$valid = TRUE;
+		$sheet = 1;
+		
+		while($valid) {
+			$link = 'http://spreadsheets.google.com/feeds/cells/' . $key . '/' . $sheet . '/public/values';
+
+			ini_set("display_errors","Off");
+			$valid = isset(simplexml_load_string(file_get_contents($link))->entry);
+			ini_set("display_errors","On");
+
+			if($valid) {
 				$result[] = file_get_contents($link);
+				$sheet++;
+			} else {
+				echo $sheet . ' sheets found in given document.';
 			}
 		}
 
-		return $result;		
+		return $result;
 	}
 
 	protected static function atomToArray($data) {
