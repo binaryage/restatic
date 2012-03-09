@@ -6,7 +6,7 @@
  * @company BinaryAge
  * @license BSD License 
  */
-class GooDataExtractor {
+class GooDataExtractor extends Extractor {
 	public static function extract($key, $delimiters) {
 		$importedData = self::parseContentToArray($key, $sheets);
 
