@@ -12,18 +12,21 @@ if [ $# -lt 1 ] ; then
         exit 1
 fi
 
+BASH_LOCATION=$( dirname "${BASH_SOURCE[0]}" )
+
+
 if [ $1 == "-d" ]
 then
 	echo "${COL_RED} Restatic started parsing html files from actual location to _site. ${COL_NORM}"
-	php $_/parser.php . _site
+	php $BASH_LOCATION/parser.php . _site
 	rm -rf _site/.git/
 else
 	if [ -d $1 ]
 	then
-		if [ -d $1 ]
+		if [ -d $2 ]
 		then
 			echo "${COL_RED} Restatic started parsing html files from $1 to $2. ${COL_NORM}"
-			php $_/parser.php $1 $2
+			php $BASH_LOCATION/parser.php $1 $2
 			rm -rf $2/.git/
 		else
 			echo "Target dir doesnt exists."
