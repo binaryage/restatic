@@ -8,12 +8,29 @@
  */
 class FilesDataParser {
 	public static function indexAndParseFolder($folder, $target, $delimiter, $data) {
+		self::removeFolderContent($target);
 		self::copyFolder($folder, $target);
 		$folder = $target;
 		$htmlFiles = self::findHtmlFiles($folder);
 		$replacables = self::findReplacables($htmlFiles, $delimiter, $data);
 		
+		self::removeFolder($folder . '/.git');
+		self::removeFolder($folder . '/_site');
+		self::removeFile($folder . '/.gitignore');
+
 		return $htmlFiles;
+	}
+
+	protected static function removeFile($file) {
+		exec('rm -rf ' . $file);
+	}
+
+	protected static function removeFolder($folder) {
+		exec('rm -rf ' . $folder);
+	}
+
+	protected static function removeFolderContent($folder) {
+		exec('rm -rf ' . $folder . '/*');
 	}
 
 	protected static function copyFolder($source, $target) {

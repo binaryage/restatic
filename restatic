@@ -27,7 +27,6 @@ else
 		then
 			echo "${COL_RED} Restatic started parsing html files from $1 to $2. ${COL_NORM}"
 			php $BASH_LOCATION/parser.php $1 $2
-			rm -rf $2/.git/
 		else
 			echo "Target dir doesnt exists."
 		fi
