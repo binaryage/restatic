@@ -28,13 +28,41 @@ if(authorize($input['access_key'])) {
 
 	$storage = new Storage(SITES_FILE);
 
-	if(($input['action'] == 'restatic') and (isset($input['id']))) {	
+	if(($input['action'] == 'restatic') and (isset($input['id']))) {
 		$id = $input['id'];
 		$source = $storage->select($id, 'source');
 		$target = $storage->select($id, 'target');
 
 		if((is_dir($source)) and ($target)) {
 			exec('sh restatic ' . $source . ' ' . $target, $output);
+		}
+	}
+
+	if(($input['action'] == 'add') and (isset($input['source'])) and (isset($input['target']))) {
+		$source = $input['source'];
+		$target = $input['target'];
+
+		if((is_dir($source)) and is_dir($target)) {
+			echo $storage->add(array(
+				'source' => $source,
+				'target' => $target,
+			));
+		} else {
+			echo 'Not dir.' . PHP_EOL;
+		}
+	}
+
+	if(($input['action'] == 'edit') and (isset($input['id'])) and (isset($input['field'])) and (isset($input['value']))) {
+		$id = $input['id'];
+		$field = $input['field'];
+		$value = $input['value'];
+
+		if((is_dir($value))) {
+			if($storage->edit($id, $field, $value)) {
+				echo 'Edited.' . PHP_EOL;
+			}
+		} else {
+			echo 'Invalid data.' . PHP_EOL;
 		}
 	}
 

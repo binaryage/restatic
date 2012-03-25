@@ -23,6 +23,7 @@ class Storage {
 		$storage = $this->getStorage($this->storageFile);
 		$storage[] = array(sizeof($storage) + 1 => $data);
 		file_put_contents($this->storageFile, json_encode($storage));
+		echo sizeof($storage);
 	}
 
 	public function edit($id, $field, $value) {
@@ -45,6 +46,8 @@ class Storage {
 		}
 
 		file_put_contents($this->storageFile, json_encode($result));
+	
+		return TRUE;
 	}
 
 	public function select($id, $field) {
