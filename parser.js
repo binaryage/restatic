@@ -36,7 +36,13 @@ var fileContents = fs.readFile(config, function(err, fileContents) {
   }
 
   optimized = yaml.eval(optimized);
+  var key = optimized.googleSpreadSheetKey;
+  var delimiters = optimized.delimiter;
 
-  console.log(optimized.googleSpreadSheetKey);
-  console.log(optimized.delimiter);
+  delimiters = delimiters.replace(" ", "");
+  delimiters = delimiters.split(",");
+
+  console.log(key);
+  console.log(delimiters[0]);
+  console.log(delimiters[1]);
 })
