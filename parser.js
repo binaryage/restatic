@@ -1,11 +1,18 @@
 var yaml = require('yaml');
 var fs = require('fs');
-var path = '../source_folder_example/restatic.yml';
+
+var arguments = process.argv.splice(2);
+var source = arguments[0];
+var target = arguments[1];
+
+if(source.charAt(source.length - 1) == '/') {
+  source = source.slice(0, -1);
+}
+
+var config = source + '/restatic.yml';
 var optimized = '';
 
-console.log('\n');
-
-var fileContents = fs.readFile(path, function(err, fileContents) {
+var fileContents = fs.readFile(config, function(err, fileContents) {
   var yaml = require('yaml');
   fileContents = fileContents.toString();
   fileContents = '\n' + fileContents;
@@ -27,9 +34,9 @@ var fileContents = fs.readFile(path, function(err, fileContents) {
       }
     }
   }
-  
+
   optimized = yaml.eval(optimized);
 
   console.log(optimized.googleSpreadSheetKey);
-  console.log(optimized.delimiters);
+  console.log(optimized.delimiter);
 })
