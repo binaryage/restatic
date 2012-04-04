@@ -46,6 +46,12 @@ var fileContents = fs.readFile(config, function(err, fileContents) {
   delimiters = delimiters.split(",");
 */
 
+/*
   var importedData = GooDataExtractor.extract(key, delimiters);
   console.log(importedData);
+*/
+
+GooDataExtractor.extract(key, delimiters, function (importedData) { 
+  console.log(importedData);
+});
 })
