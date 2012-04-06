@@ -1,19 +1,27 @@
 var GooDataExtractor = function () {};
  
-GooDataExtractor.prototype.extract = function (key, delimiter) {
-        console.log(key);
-        console.log(delimiter);
- 
-        var importedData = this.mineAndParseContentToArray(key);
-        return importedData;
+GooDataExtractor.prototype.extract = function (key, delimiters, callback) {
+    /*
+    this.mineData(key, 1, function (data) { 
+    	console.log('------------------------------------------------');
+  		console.log(data);
+  		// callback(data);
+	});
+	*/
+
+	delimiters = delimiters.replace(' ', '');
+	delimiters = delimiters.split(',');
+
+	callback(GooDataExtractor.prototype.parseContentToArray(delimiters, ''));
 }
  
-GooDataExtractor.prototype.parseContentToArray = function (data) {
-        var parsed = new Array();
-        parsed['/-Posts-B2/'] = 'Data 1';
-        parsed['/-Posts-B3/'] = 'Data 2';
+GooDataExtractor.prototype.parseContentToArray = function (delimiters, data) {
+	var parsed = new Array();
+
+    parsed[delimiters[0] + 'Posts-B2' + delimiters[1]] = 'Data 1';
+    parsed[delimiters[0] + 'Posts-B3' + delimiters[1]] = 'Data 2';
  
-        return parsed;
+    return parsed;
 }
 
 GooDataExtractor.rawData = '';
@@ -57,13 +65,5 @@ GooDataExtractor.prototype.mineData = function (key, sheet, callback) {
 			});
 		})
 }
- 
-GooDataExtractor.prototype.mineAndParseContentToArray = function (key) {
-    this.mineData(key, 1, function (data) { 
-    	console.log('------------------------------------------------');
-  		console.log(data);
-  		// callback(data);
-	});
-}
- 
+
 module.exports = GooDataExtractor;

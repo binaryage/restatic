@@ -1,5 +1,8 @@
 var GooDataExtractor = require('./GooDataExtractor.js');
+var SiteParser = require('./SiteParser.js');
+
 var GooDataExtractor = new GooDataExtractor();
+var SiteParser = new SiteParser();
 
 var yaml = require('yaml');
 var fs = require('fs');
@@ -51,7 +54,5 @@ var fileContents = fs.readFile(config, function(err, fileContents) {
   console.log(importedData);
 */
 
-GooDataExtractor.extract(key, delimiters, function (importedData) { 
-  console.log(importedData);
+  GooDataExtractor.extract(key, delimiters, SiteParser.parse);
 });
-})
