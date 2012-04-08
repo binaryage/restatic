@@ -1,6 +1,8 @@
 /* ---- Variables setup ---- */
 var GooDataExtractor = require('./GooDataExtractor.js');
 var SiteParser = require('./SiteParser.js');
+var rimraf = require('rimraf');
+var wrench = require('wrench');
 
 var GooDataExtractor = new GooDataExtractor();
 var SiteParser = new SiteParser();
@@ -38,8 +40,7 @@ try {
 }
 
 catch(e) {
-  console.log('Target directory doesn\'t exists.');
-  checked = false;
+  fs.mkdirSync(target);
 }
 
 /* ---- Restatic ---- */
@@ -78,16 +79,14 @@ if(checked) {
     optimized = yaml.eval(optimized);
     var key = optimized.googleSpreadSheetKey;
     var delimiters = optimized.delimiter;
-  /*
-    delimiters = delimiters.replace(" ", "");
-    delimiters = delimiters.split(",");
-  */
-  
-  /*
-    var importedData = GooDataExtractor.extract(key, delimiters);
-    console.log(importedData);
-  */
-  
-    GooDataExtractor.extract(key, delimiters, SiteParser.parse);
+
+    /* Clear target's content */
+    rimraf(target, function (result) {
+        /* Clear source to target */
+        wrench.copyDirSyncRecursive(source, target);
+
+        /* Extract and parse */
+        GooDataExtractor.extract(key, delimiters, target, SiteParser.parse);
+    });
   });
 }

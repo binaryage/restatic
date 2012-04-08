@@ -1,6 +1,6 @@
 var GooDataExtractor = function () {};
  
-GooDataExtractor.prototype.extract = function (key, delimiters, callback) {
+GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
     /*
     this.mineData(key, 1, function (data) { 
     	console.log('------------------------------------------------');
@@ -12,7 +12,7 @@ GooDataExtractor.prototype.extract = function (key, delimiters, callback) {
 	delimiters = delimiters.replace(' ', '');
 	delimiters = delimiters.split(',');
 
-	callback(GooDataExtractor.prototype.parseContentToArray(delimiters, ''));
+	callback(GooDataExtractor.prototype.parseContentToArray(delimiters, ''), target);
 }
  
 GooDataExtractor.prototype.parseContentToArray = function (delimiters, data) {
