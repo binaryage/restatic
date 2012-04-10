@@ -1,18 +1,13 @@
 var GooDataExtractor = function () {};
  
 GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
-    /*
     this.mineData(key, 1, function (data) { 
-    	console.log('------------------------------------------------');
-  		console.log(data);
-  		// callback(data);
+    	delimiters = delimiters.replace(' ', '');
+		delimiters = delimiters.split(',');
+
+		console.log(data);
+		callback(GooDataExtractor.prototype.parseContentToArray(delimiters, data), target);
 	});
-	*/
-
-	delimiters = delimiters.replace(' ', '');
-	delimiters = delimiters.split(',');
-
-	callback(GooDataExtractor.prototype.parseContentToArray(delimiters, ''), target);
 }
  
 GooDataExtractor.prototype.parseContentToArray = function (delimiters, data) {
@@ -54,7 +49,7 @@ GooDataExtractor.prototype.mineData = function (key, sheet, callback) {
 					GooDataExtractor.rawData = GooDataExtractor.rawData.substring(9, GooDataExtractor.rawData.length);
 				}
 				console.log(GooDataExtractor.rawData);
-				// callback(GooDataExtractor.rawData);
+				callback(GooDataExtractor.rawData);
 			} else {
 				GooDataExtractor.rawData += rawData;
 				GooDataExtractor.sheetNumber++;

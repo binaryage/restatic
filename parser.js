@@ -1,9 +1,11 @@
-/* ---- Variables setup ---- */
+/* ---- Libraries setup ---- */
 var GooDataExtractor = require('./GooDataExtractor.js');
 var SiteParser = require('./SiteParser.js');
+
 var rimraf = require('rimraf');
 var wrench = require('wrench');
 
+/* ---- Variables setup ---- */
 var GooDataExtractor = new GooDataExtractor();
 var SiteParser = new SiteParser();
 
@@ -77,6 +79,7 @@ if(checked) {
     }
   
     optimized = yaml.eval(optimized);
+
     var key = optimized.googleSpreadSheetKey;
     var delimiters = optimized.delimiter;
 
