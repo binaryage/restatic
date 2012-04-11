@@ -3,7 +3,7 @@ var SiteParser = function () {};
 SiteParser.filesToParse = new Array();
 SiteParser.dirs = new Array();
 
-/* Only public function called from outside of SiteParser */
+// Only public function called from outside of SiteParser
 SiteParser.prototype.parse = function (data, target) {
 	var fs = require('fs');
 	var i = 0;
@@ -48,7 +48,7 @@ SiteParser.prototype.prepareData = function (target) {
 	});
 }
 
-/* Tested for two levels of depth */
+// Tested for two levels of depth
 SiteParser.prototype.walkThrought = function (dir, path) {
 	var fs = require('fs');
 	var stats;
@@ -72,7 +72,7 @@ SiteParser.prototype.walkThrought = function (dir, path) {
 	}
 }
 
-/* Finds all .html or .htm ending files */
+// Finds all .html or .htm ending files
 SiteParser.prototype.indexDir = function (dir, path) {
 	var i = SiteParser.filesToParse.length;
 

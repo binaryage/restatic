@@ -1,63 +1,67 @@
 var GooDataExtractor = function () {};
  
 GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
-    this.mineData(key, 1, function (data) { 
+    this.mineData(key, function (data) { 
     	delimiters = delimiters.replace(' ', '');
 		delimiters = delimiters.split(',');
 
-		console.log(data);
-		callback(GooDataExtractor.prototype.parseContentToArray(delimiters, data), target);
+		var i = 0;
+		var sheetName = '';
+		var result = new Array();
+
+		for(i = 0; i <= data.length; i++) {
+			if(typeof data[i] != 'undefined') {
+				parsed = JSON.parse(data[i]);
+				sheetName = parsed.feed.title.$t;
+
+				for(j = 0; j <= parsed.feed.entry.length; j++) {
+					if(typeof parsed.feed.entry[j] != 'undefined') {
+						result[delimiters[0] + sheetName + '-' + parsed.feed.entry[j].title.$t + delimiters[1]] = parsed.feed.entry[j].content.$t;
+					}
+				}
+			}
+		}
+		callback(result, target);
 	});
 }
  
-GooDataExtractor.prototype.parseContentToArray = function (delimiters, data) {
-	var parsed = new Array();
-
-    parsed[delimiters[0] + 'Posts-B2' + delimiters[1]] = 'Data 1';
-    parsed[delimiters[0] + 'Posts-B3' + delimiters[1]] = 'Data 2';
- 
-    return parsed;
-}
-
-GooDataExtractor.rawData = '';
-GooDataExtractor.sheetNumber = 1;
- 
-GooDataExtractor.prototype.mineData = function (key, sheet, callback) {
+GooDataExtractor.prototype.mineData = function (key, callback) {
 	var http = require('http');
 
-	var state = '';
 	var rawData;
 
-	var link = '/feeds/cells/' + key + '/' + sheet + '/public/values';
- 
-	var options = {
-		host: 'spreadsheets.google.com',
-		port: 80,
-		path: link
-	};
+	var xml = new Array();
+	var i = 0;
 
-	http.get(options, function(res) {
-		res.setEncoding('utf-8');
+	(function download() {
+		i++;
+		rawData = '';
 
-		res.on('data', function (chunk) {
-			rawData += chunk;
-		});
+		var link = '/feeds/cells/' + key + '/' + i + '/public/values?alt=json';
+
+		var options = {
+			host: 'spreadsheets.google.com',
+			port: 80,
+			path: link
+		};
+
+		http.get(options, function(res) {
+			res.setEncoding('utf-8');
+
+			res.on('data', function (chunk) {
+				rawData += chunk;
+			});
 	 
-		res.on('end', function () {
-			if(rawData.length < 60) {
-				if(GooDataExtractor.rawData.substring(0, 9) == 'undefined') {
-					GooDataExtractor.rawData = GooDataExtractor.rawData.substring(9, GooDataExtractor.rawData.length);
+			res.on('end', function () {
+				if(res.statusCode == 200) {
+					xml.push(rawData);
+					download();
+				} else {
+					callback(xml);
 				}
-				console.log(GooDataExtractor.rawData);
-				callback(GooDataExtractor.rawData);
-			} else {
-				GooDataExtractor.rawData += rawData;
-				GooDataExtractor.sheetNumber++;
-				GooDataExtractor.prototype.mineData(key, GooDataExtractor.sheetNumber);
-				rawData = '';
-			}
-		});
-	})
+			});
+		})
+	}());
 }
 
 module.exports = GooDataExtractor;
