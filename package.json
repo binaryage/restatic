@@ -1,5 +1,6 @@
 {
   "name": "Restatic",
+  "version": "0.0.1",
   "description": "Pumps spreadsheet data to your static web!",
   "author": "Jan Palounek <jan@binaryage.com>, BinaryAge",
   "dependencies": {
