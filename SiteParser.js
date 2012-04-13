@@ -18,7 +18,7 @@ SiteParser.prototype.parse = function (data, target) {
 
 				if(content != updated) {
 					fs.writeFileSync(file, updated, 'utf8');
-					console.log('Replacing ' + key + ' with ' + data[key] + ' in ' + file.replace(target, ''));
+					console.log(' > Replacing ' + key + ' with ' + data[key] + ' in ' + file.replace(target, ''));
 					i++;
 				}
 			}
@@ -92,5 +92,4 @@ SiteParser.prototype.indexDir = function (dir, path) {
 		}
 	});
 }
-
 module.exports = SiteParser;

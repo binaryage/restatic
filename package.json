@@ -1,0 +1,9 @@
+{
+  "name": "Restatic",
+  "description": "Pumps spreadsheet data to your static web!",
+  "author": "Jan Palounek <jan@binaryage.com>, BinaryAge",
+  "dependencies": {
+    "rimraf": "~2.0.1",
+    "wrench": "~1.3.8"
+  }
+}
