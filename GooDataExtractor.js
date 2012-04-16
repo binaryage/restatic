@@ -1,8 +1,8 @@
 var GooDataExtractor = function () {};
- 
+
 GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
-    this.mineData(key, function (data) { 
-    	delimiters = delimiters.replace(' ', '');
+	this.mineData(key, function (data) { 
+		delimiters = delimiters.replace(' ', '');
 		delimiters = delimiters.split(',');
 
 		var i = 0;

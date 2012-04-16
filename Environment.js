@@ -83,12 +83,12 @@ Environment.prototype.checkResults = function () {
 Environment.prototype.loadConfigFile = function (fileName) {
 	var fs = require('fs');
 	var contents = fs.readFileSync(Environment.conf.source + '/' + fileName);
-  	config = JSON.parse(contents);
+	config = JSON.parse(contents);
 
-  	if(typeof config != undefined) {
-  		Environment.conf.googleSpreadSheetKey = config.googleSpreadSheetKey;
-  		Environment.conf.delimiter = config.delimiter;
-  	}
+	if(typeof config != undefined) {
+		Environment.conf.googleSpreadSheetKey = config.googleSpreadSheetKey;
+		Environment.conf.delimiter = config.delimiter;
+	}
 }
 
 Environment.prototype.loadLineArgs = function (args) {

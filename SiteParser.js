@@ -84,8 +84,8 @@ SiteParser.prototype.indexDir = function (dir, path) {
 	var i = SiteParser.filesToParse.length;
 
 	if(path.charAt(path.length - 1) == '/') {
-    	path = path.slice(0, -1);
-  	}
+		path = path.slice(0, -1);
+	}
 
 	dir.forEach(function(file) {
 		if(file.substr(-5) == '.html') {
