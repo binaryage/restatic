@@ -1,3 +1,6 @@
+var ansi = require('ansi');
+var cursor = ansi(process.stdout);
+
 var GooDataExtractor = function () {};
 
 GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
@@ -28,16 +31,12 @@ GooDataExtractor.prototype.extract = function (key, delimiters, target, callback
 GooDataExtractor.prototype.mineData = function (key, callback) {
 	var http = require('http');
 
-	var rawData;
+	var xml = [];
 
-	var xml = new Array();
-	var i = 0;
+	var download = function(sheet) {
+		var rawData = '';
 
-	(function download() {
-		i++;
-		rawData = '';
-
-		var link = '/feeds/cells/' + key + '/' + i + '/public/values?alt=json';
+		var link = '/feeds/cells/' + key + '/' + sheet + '/public/values?alt=json';
 
 		var options = {
 			host: 'spreadsheets.google.com',
@@ -45,6 +44,7 @@ GooDataExtractor.prototype.mineData = function (key, callback) {
 			path: link
 		};
 
+		cursor.cyan().write(' @ fetching ').blue().write("http://"+options.host+':'+options.port+options.path).reset();
 		http.get(options, function(res) {
 			res.setEncoding('utf-8');
 
@@ -54,14 +54,19 @@ GooDataExtractor.prototype.mineData = function (key, callback) {
 	 
 			res.on('end', function () {
 				if(res.statusCode == 200) {
+					cursor.write(" ... OK\n");
 					xml.push(rawData);
-					download();
+					download(sheet+1);
 				} else {
+					cursor.write(" ... DONE\n");
 					callback(xml);
 				}
 			});
 		})
-	}());
+	};
+	
+	// start downloading sheet 1
+	download(1);
 }
 
 module.exports = GooDataExtractor;
