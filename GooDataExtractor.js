@@ -8,16 +8,15 @@ GooDataExtractor.prototype.extract = function (key, delimiters, target, callback
 		delimiters = delimiters.replace(' ', '');
 		delimiters = delimiters.split(',');
 
-		var i = 0;
 		var sheetName = '';
-		var result = new Array();
+		var result = [];
 
-		for(i = 0; i <= data.length; i++) {
+		for(var i = 0; i <= data.length; i++) {
 			if(typeof data[i] != 'undefined') {
 				parsed = JSON.parse(data[i]);
 				sheetName = parsed.feed.title.$t;
 
-				for(j = 0; j <= parsed.feed.entry.length; j++) {
+				for(var j = 0; j <= parsed.feed.entry.length; j++) {
 					if(typeof parsed.feed.entry[j] != 'undefined') {
 						result[delimiters[0] + sheetName + '-' + parsed.feed.entry[j].title.$t + delimiters[1]] = parsed.feed.entry[j].content.$t;
 					}
@@ -44,7 +43,7 @@ GooDataExtractor.prototype.mineData = function (key, callback) {
 			path: link
 		};
 
-		cursor.cyan().write(' @ fetching ').blue().write("http://"+options.host+':'+options.port+options.path).reset();
+		cursor.cyan().write(' @ Fetching ').blue().write("http://"+options.host+':'+options.port+options.path).reset();
 		http.get(options, function(res) {
 			res.setEncoding('utf-8');
 
