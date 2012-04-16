@@ -14,7 +14,7 @@ When you launch restatic, it will:
   
   * copy the source to target directory
   * extract data from Google Spreadsheets and builds associative array
-  * processe contents of target directory and replace all marks with associated fields
+  * process contents of target directory and replace all marks with associated fields
 
 ## You may write your own extractor
 
