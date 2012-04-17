@@ -13,7 +13,7 @@ Restatic takes your static web and replaces restatic markup with dynamic data, s
 When you launch restatic, it will:
   
   * copy the source to target directory
-  * extract data from Google Spreadsheets and builds associative array
+  * extract data from Google Spreadsheets and build associative array
   * process contents of target directory and replace all marks with associated fields
 
 ## You may write your own extractor
