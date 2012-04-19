@@ -1,6 +1,3 @@
-var ansi = require('ansi');
-var cursor = ansi(process.stdout);
-
 var SiteParser = function () {};
 
 SiteParser.filesToParse = new Array();
@@ -21,11 +18,7 @@ SiteParser.prototype.parse = function (data, target) {
 
 				if(content != updated) {
 					fs.writeFileSync(file, updated, 'utf8');
-					var friendlyFilename = file.replace(target, '');
-					cursor.magenta().write(' * ')
-						.write('Replacing ').yellow().write(key).reset()
-						.write(' with ').yellow().write(data[key]).reset()
-						.write(' in ').blue().write(friendlyFilename).reset().write("\n");
+					console.log(' > Replacing ' + key + ' with ' + data[key] + ' in ' + file.replace(target, ''));
 					i++;
 				}
 			}
@@ -37,7 +30,7 @@ SiteParser.prototype.parse = function (data, target) {
 			}
 
 			if(j == SiteParser.filesToParse.length) {
-				cursor.green().write('Parsing done in ').blue().write(target).reset().write("\n");
+				console.log('\033[32mParsing done, enjoy it! Its prepared in \033[31m' + target + '\033[39m');
 			}
 		});
 	});
@@ -84,8 +77,8 @@ SiteParser.prototype.indexDir = function (dir, path) {
 	var i = SiteParser.filesToParse.length;
 
 	if(path.charAt(path.length - 1) == '/') {
-		path = path.slice(0, -1);
-	}
+    	path = path.slice(0, -1);
+  	}
 
 	dir.forEach(function(file) {
 		if(file.substr(-5) == '.html') {

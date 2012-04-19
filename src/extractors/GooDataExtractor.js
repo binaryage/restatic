@@ -1,22 +1,20 @@
-var ansi = require('ansi');
-var cursor = ansi(process.stdout);
-
 var GooDataExtractor = function () {};
-
+ 
 GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
-	this.mineData(key, function (data) { 
-		delimiters = delimiters.replace(' ', '');
+    this.mineData(key, function (data) { 
+    	delimiters = delimiters.replace(' ', '');
 		delimiters = delimiters.split(',');
 
+		var i = 0;
 		var sheetName = '';
-		var result = [];
+		var result = new Array();
 
-		for(var i = 0; i <= data.length; i++) {
+		for(i = 0; i <= data.length; i++) {
 			if(typeof data[i] != 'undefined') {
 				parsed = JSON.parse(data[i]);
 				sheetName = parsed.feed.title.$t;
 
-				for(var j = 0; j <= parsed.feed.entry.length; j++) {
+				for(j = 0; j <= parsed.feed.entry.length; j++) {
 					if(typeof parsed.feed.entry[j] != 'undefined') {
 						result[delimiters[0] + sheetName + '-' + parsed.feed.entry[j].title.$t + delimiters[1]] = parsed.feed.entry[j].content.$t;
 					}
@@ -30,12 +28,16 @@ GooDataExtractor.prototype.extract = function (key, delimiters, target, callback
 GooDataExtractor.prototype.mineData = function (key, callback) {
 	var http = require('http');
 
-	var xml = [];
+	var rawData;
 
-	var download = function(sheet) {
-		var rawData = '';
+	var xml = new Array();
+	var i = 0;
 
-		var link = '/feeds/cells/' + key + '/' + sheet + '/public/values?alt=json';
+	(function download() {
+		i++;
+		rawData = '';
+
+		var link = '/feeds/cells/' + key + '/' + i + '/public/values?alt=json';
 
 		var options = {
 			host: 'spreadsheets.google.com',
@@ -43,7 +45,6 @@ GooDataExtractor.prototype.mineData = function (key, callback) {
 			path: link
 		};
 
-		cursor.cyan().write(' @ Fetching ').blue().write("http://"+options.host+':'+options.port+options.path).reset();
 		http.get(options, function(res) {
 			res.setEncoding('utf-8');
 
@@ -53,19 +54,14 @@ GooDataExtractor.prototype.mineData = function (key, callback) {
 	 
 			res.on('end', function () {
 				if(res.statusCode == 200) {
-					cursor.write(" ... OK\n");
 					xml.push(rawData);
-					download(sheet+1);
+					download();
 				} else {
-					cursor.write(" ... DONE\n");
 					callback(xml);
 				}
 			});
 		})
-	};
-	
-	// start downloading sheet 1
-	download(1);
+	}());
 }
 
 module.exports = GooDataExtractor;

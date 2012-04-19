@@ -7,7 +7,7 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 	// Load raw data
 	this.loadLineArgs(lineArgs);
 	this.loadConfigFile(configFile);
-	this.loadExtractor('./GooDataExtractor.js');
+	this.loadExtractor('./extractors/GooDataExtractor.js');
 
 	// Fix it
 	this.fixConf();
@@ -17,7 +17,7 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 
 	// Check the result
 	if(this.checkResults()) {
-		Environment.conf.extractor = this.extractor;
+		Environment.conf.extractor = Environment.extractor;
 		return Environment.conf;
 	} else {
 		return false;
@@ -26,15 +26,18 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 
 Environment.prototype.loadExtractor = function (defaultExtractor) {
 	var path = require('path');
-	this.extractor = defaultExtractor;
 
-	if(typeof this.extractor != undefined) {
-		if(!path.existsSync(this.extractor)) {
-			if(path.existsSync('./' + this.extractor)) {
-				this.extractor = './' + this.extractor;
-			}
+	if((Environment.conf.extractor != 'defaultExtractor') || (typeof Environment.conf.extractor != undefined)) {
+		if(path.existsSync(Environment.conf.extractor)) {
+			Environment.extractor = Environment.conf.extractor;
+		} else  {
+			Environment.extractor = defaultExtractor;	
 		}
+	} else {
+		Environment.extractor = defaultExtractor;
 	}
+
+	Environment.conf.extractor = Environment.extractor;
 }
 
 Environment.prototype.prepareEnvironment = function () {
@@ -83,12 +86,18 @@ Environment.prototype.checkResults = function () {
 Environment.prototype.loadConfigFile = function (fileName) {
 	var fs = require('fs');
 	var contents = fs.readFileSync(Environment.conf.source + '/' + fileName);
-	config = JSON.parse(contents);
+  	config = JSON.parse(contents);
 
-	if(typeof config != undefined) {
-		Environment.conf.googleSpreadSheetKey = config.googleSpreadSheetKey;
-		Environment.conf.delimiter = config.delimiter;
-	}
+  	if(typeof config != undefined) {
+  		Environment.conf.googleSpreadSheetKey = config.googleSpreadSheetKey;
+  		Environment.conf.delimiter = config.delimiter;
+
+  		if(typeof config.extractor != undefined) {
+  			Environment.conf.extractor = config.extractor;
+  		} else {
+  			Environment.conf.extractor = 'defaultExtractor';
+  		}
+  	}
 }
 
 Environment.prototype.loadLineArgs = function (args) {
