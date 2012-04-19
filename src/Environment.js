@@ -114,4 +114,14 @@ Environment.prototype.loadLineArgs = function (args) {
 	}
 }
 
+Environment.prototype.storeResult = function (data, target) {
+	var fs = require('fs');
+
+	console.log(typeof data);
+	console.log(JSON.stringify(data));
+
+	console.log(data);
+	console.log(target);
+}
+
 module.exports = Environment;
