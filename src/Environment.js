@@ -117,11 +117,26 @@ Environment.prototype.loadLineArgs = function (args) {
 Environment.prototype.storeResult = function (data, target) {
 	var fs = require('fs');
 
-	console.log(typeof data);
-	console.log(JSON.stringify(data));
+	// Get length
+	var i = 0;
+	for(var key in data) {i++}
+	var length = i
+	i = 0;
 
-	console.log(data);
-	console.log(target);
+	var json = '{';
+	for(var key in data) {
+  		json += '"' + key + '" : "' + data[key] + '"';
+
+  		// Is last
+  		if((i + 1) != length) {
+			json += ', ';
+  		}
+  		i++;
+	}
+	json += '}';
+
+	var log = fs.createWriteStream(target + 'data.json', {'flags': 'w'});
+	log.end(json + "\n");
 }
 
 module.exports = Environment;
