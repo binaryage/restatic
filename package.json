@@ -32,6 +32,7 @@
     "install": "",
     "restatic": "./restatic",
     "restatic-fetch": "./restatic-fetch",
-    "restatic-process": "./restatic-process"
+    "restatic-process": "./restatic-process",
+    "test": "make test"
   }
 }
