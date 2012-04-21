@@ -14,32 +14,36 @@ SiteParser.prototype.parse = function (data, target) {
 	SiteParser.prototype.prepareData(target);
 
 	SiteParser.filesToParse.forEach(function (file) {
-		fs.readFile(file, 'utf8', function (err, content) {
-			j++;
-			for(var key in data) {
-				updated = content.replace(key, data[key]);
+		var origin = fs.readFileSync(file, 'utf8').toString();
+		var updated = origin;
 
-				if(content != updated) {
-					fs.writeFileSync(file, updated, 'utf8');
-					var friendlyFilename = file.replace(target, '');
-					cursor.magenta().write(' * ')
-						.write('Replacing ').yellow().write(key).reset()
-						.write(' with ').yellow().write(data[key]).reset()
-						.write(' in ').blue().write(friendlyFilename).reset().write("\n");
-					i++;
-				}
-			}
+		j++;
+		for(var key in data) {
+			updated = updated.replace(key, data[key]);
+			if(origin != updated) {
+				fs.writeFileSync(file, updated, 'utf8');
 
-			if(i == 0) {
-				console.log('Nothing to update in ' + file);
-			} else {
-				i = 0;
+				var friendlyFilename = file.replace(target, '');
+				cursor.magenta().write(' * ')
+					.write('Replacing ').yellow().write(key).reset()
+					.write(' with ').yellow().write(data[key]).reset()
+					.write(' in ').blue().write(friendlyFilename).reset().write("\n");
+				i++;
 			}
+		}
 
-			if(j == SiteParser.filesToParse.length) {
-				cursor.green().write('Parsing done in ').blue().write(target).reset().write("\n");
-			}
-		});
+		content = fs.readFileSync(file, 'utf8').toString();
+
+
+		if(i == 0) {
+			console.log('Nothing to update in ' + file);
+		} else {
+			i = 0;
+		}
+
+		if(j == SiteParser.filesToParse.length) {
+			cursor.green().write('Parsing done in ').blue().write(target).reset().write("\n");
+		}
 	});
 }
 

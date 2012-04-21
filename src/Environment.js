@@ -1,3 +1,6 @@
+var ansi = require('ansi');
+var cursor = ansi(process.stdout);
+
 var Environment = function () {};
 
 Environment.conf = {};
@@ -41,14 +44,26 @@ Environment.prototype.loadExtractor = function (defaultExtractor) {
 }
 
 Environment.prototype.prepareEnvironment = function () {
-	var rimraf = require('rimraf');
-	var wrench = require('wrench');
-
-	// Remove existing target
-	rimraf(Environment.conf.target, function (result) {
+	if(Environment.conf.mode == 'process') {
+		var rimraf = require('rimraf');
+		var wrench = require('wrench');
+		// Remove existing target
+		rimraf.sync(Environment.conf.target);
 		// Copy source to target
 		wrench.copyDirSyncRecursive(Environment.conf.source, Environment.conf.target);
-	});
+		
+		rimraf(Environment.conf.target + '/.git', function (result) {
+			rimraf(Environment.conf.target + '/.gitignore', function (result) {
+				rimraf(Environment.conf.target + '/_site', function (result) {
+					rimraf(Environment.conf.target + '/.DS_Store', function (result) {
+						rimraf(Environment.conf.target + '/restatic.json', function (result) {
+		
+						});	
+					});
+				});
+			});
+		});
+	}
 }
 
 Environment.prototype.fixConf = function () {
@@ -105,6 +120,11 @@ Environment.prototype.loadLineArgs = function (args) {
 		if(typeof args[1] != undefined) {
 			Environment.conf.source = args[0];
 			Environment.conf.target = args[1];
+			if(typeof args[2] != undefined) {
+				Environment.conf.mode = args[2];
+			} else {
+				Environment.conf.mode = 'both';
+			}
 			Environment.conf.checked = true;
 		} else {
 			console.log('Source is undefined in given arguments!');
@@ -121,7 +141,7 @@ Environment.prototype.storeResult = function (data, target) {
 	var i = 0;
 	for(var key in data) {i++}
 	var length = i
-	i = 0;
+	i = 0;  
 
 	var json = '{';
 	for(var key in data) {
@@ -135,8 +155,15 @@ Environment.prototype.storeResult = function (data, target) {
 	}
 	json += '}';
 
-	var log = fs.createWriteStream(target + 'data.json', {'flags': 'w'});
+	var log = fs.createWriteStream(target + '/data.json', {'flags': 'w'});
 	log.end(json + "\n");
+	cursor.green().write('Data fetched in ').blue().write(target + '/data.json').reset().write("\n");
+}
+
+Environment.prototype.loadData = function (source, target, callback) {
+	var fs = require('fs');
+
+	callback(JSON.parse(fs.readFileSync(target + 'data.json').toString()), target);
 }
 
 module.exports = Environment;
