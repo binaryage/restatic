@@ -115,11 +115,19 @@ Environment.prototype.loadConfigFile = function (fileName) {
   	}
 }
 
+Environment.prototype.fixEndingSlash = function (path) {
+	if(path.charAt(path.length - 1) != '/') {
+		return path + '/';
+	} else {
+		return path;
+	}
+}
+
 Environment.prototype.loadLineArgs = function (args) {
 	if(typeof args[0] != undefined) {
 		if(typeof args[1] != undefined) {
-			Environment.conf.source = args[0];
-			Environment.conf.target = args[1];
+			Environment.conf.source = this.fixEndingSlash(args[0]);
+			Environment.conf.target = this.fixEndingSlash(args[1]);
 			if(typeof args[2] != undefined) {
 				Environment.conf.mode = args[2];
 			} else {
