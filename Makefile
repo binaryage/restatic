@@ -28,8 +28,8 @@ docs: test-docs
 
 test-docs:
 	make test REPORTER=doc \
-		| cat docs/head.html - docs/tail.html \
-		> docs/test.html
+		| cat docs/test_results/head.html - docs/test_results/tail.html \
+		> docs/test_results/test.html
 
 clean:
 	rm -f superagent{,.min}.js

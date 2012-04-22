@@ -43,18 +43,18 @@ Testing validity of input data - config etc.
         <dt>should be able to set extractor config variable from right configfile</dt>
         <dd><pre><code>
 		var config = Environment.prepare({0: source, 1: target}, config_file);
-		config.extractor.should.equal('./extractors/GooDataExtractor.js');</code></pre></dd>
+		config.extractor.should.equal('./extractors/GoogleSpreadsheetDataExtractor.js');</code></pre></dd>
       </dl>
     </section>
     <section class="suite">
-      <h1>GooDataExtractor</h1>
+      <h1>GoogleSpreadsheetDataExtractor</h1>
       <dl>
 [36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/1/public/values?alt=json[0m ... OK
 [36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/2/public/values?alt=json[0m ... OK
 [36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/3/public/values?alt=json[0m ... DONE
         <dt>should be able to extract data from spreadsheet and parse it</dt>
         <dd><pre><code>
-GooDataExtractor.extract(key, delimiters, '', function (data) {
+GoogleSpreadsheetDataExtractor.extract(key, delimiters, '', function (data) {
   var result = false;
 
   if(typeof data == 'object') {
