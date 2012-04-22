@@ -1,0 +1,87 @@
+<html>
+	<head>
+		<meta charset="utf-8" /> 
+		<meta name="keywords" content="" /> 
+		<meta name="description" content="" /> 
+		<title> Test report </title>
+	</head>
+	<body>Testing validity of input data - config etc.
+    <section class="suite">
+      <h1>Environment</h1>
+      <dl>
+Testing validity of input data - config etc.
+        <dt>should be able to check if environment were setted up</dt>
+        <dd><pre><code>
+		var config = Environment.prepare({0: source, 1: target}, config_file);
+		config.checked.should.equal(true);</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Environment</h1>
+      <dl>
+Testing validity of input data - config etc.
+        <dt>should be able to set googleSpreadSheetKey config variable from right configfile</dt>
+        <dd><pre><code>
+		var config = Environment.prepare({0: source, 1: target}, config_file);
+		config.googleSpreadSheetKey.should.equal('0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E');</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Environment</h1>
+      <dl>
+Testing validity of input data - config etc.
+        <dt>should be able to set delimiter config variable from right configfile</dt>
+        <dd><pre><code>
+		var config = Environment.prepare({0: source, 1: target}, config_file);
+		config.delimiter.should.equal('/-, -/');</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>Environment</h1>
+      <dl>
+Testing validity of input data - config etc.
+        <dt>should be able to set extractor config variable from right configfile</dt>
+        <dd><pre><code>
+		var config = Environment.prepare({0: source, 1: target}, config_file);
+		config.extractor.should.equal('./extractors/GooDataExtractor.js');</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>GooDataExtractor</h1>
+      <dl>
+[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/1/public/values?alt=json[0m ... OK
+[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/2/public/values?alt=json[0m ... OK
+[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/3/public/values?alt=json[0m ... DONE
+        <dt>should be able to extract data from spreadsheet and parse it</dt>
+        <dd><pre><code>
+GooDataExtractor.extract(key, delimiters, '', function (data) {
+  var result = false;
+
+  if(typeof data == 'object') {
+    result = true;
+  }
+
+  result.should.be.true;
+  done();
+});</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>SiteParser</h1>
+      <dl>
+[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/1/public/values?alt=json[0m        <dt>should be able to parse data correctly to demo target</dt>
+        <dd><pre><code>
+		Extractor.extract(config.googleSpreadSheetKey, config.delimiter, config.target, SiteParser.parse);
+    
+    // Valid for only one spreadsheet
+    var content = fs.readFileSync(target + '/' + 'snippet.html').toString();
+    var failed = false;
+    if(content.replace('/-Posts-B1-/', '') != content) {
+      failed = true;
+    }
+
+    failed.should.be.false;</code></pre></dd>
+      </dl>
+    </section>
+	</body>
+</html>
