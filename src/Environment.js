@@ -85,7 +85,7 @@ Environment.prototype.checkResults = function () {
 	console.log('Testing validity of input data - config etc.');
 
 	if(typeof Environment.conf.source) {
-		targetStats = fs.lstatSync(Environment.conf.source);
+		var targetStats = fs.lstatSync(Environment.conf.source);
 		if(!targetStats.isDirectory()) {
 			console.log('Source dir doesn\'t exists.');
 			result = false;
@@ -101,7 +101,7 @@ Environment.prototype.checkResults = function () {
 Environment.prototype.loadConfigFile = function (fileName) {
 	var fs = require('fs');
 	var contents = fs.readFileSync(Environment.conf.source + '/' + fileName);
-  	config = JSON.parse(contents);
+  	var config = JSON.parse(contents);
 
   	if(typeof config != undefined) {
   		Environment.conf.googleSpreadSheetKey = config.googleSpreadSheetKey;
