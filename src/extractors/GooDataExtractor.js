@@ -13,7 +13,7 @@ GooDataExtractor.prototype.extract = function (key, delimiters, target, callback
 
 		for(var i = 0; i <= data.length; i++) {
 			if(typeof data[i] != 'undefined') {
-				parsed = JSON.parse(data[i]);
+				var parsed = JSON.parse(data[i]);
 				sheetName = parsed.feed.title.$t;
 
 				for(var j = 0; j <= parsed.feed.entry.length; j++) {
