@@ -1,5 +1,9 @@
 var ansi = require('ansi');
 var cursor = ansi(process.stdout);
+var rimraf = require('rimraf');
+var wrench = require('wrench');
+var fs = require('fs');
+var path = require('path');
 
 var Environment = function () {};
 
@@ -9,11 +13,12 @@ Environment.extractor = '';
 Environment.prototype.prepare = function (lineArgs, configFile) {
 	// Load raw data
 	this.loadLineArgs(lineArgs);
-	this.loadConfigFile(configFile);
-	this.loadExtractor('./extractors/GooDataExtractor.js');
 
 	// Fix it
-	this.fixConf();
+	this.fixConf(lineArgs);
+
+	this.loadConfigFile(configFile);
+	this.loadExtractor('./extractors/GooDataExtractor.js');
 
 	// Prepare environment
 	this.prepareEnvironment();
@@ -28,7 +33,7 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 }
 
 Environment.prototype.loadExtractor = function (defaultExtractor) {
-	var path = require('path');
+	
 
 	if((Environment.conf.extractor != 'defaultExtractor') || (typeof Environment.conf.extractor != undefined)) {
 		if(path.existsSync(Environment.conf.extractor)) {
@@ -45,12 +50,37 @@ Environment.prototype.loadExtractor = function (defaultExtractor) {
 
 Environment.prototype.prepareEnvironment = function () {
 	if(Environment.conf.mode == 'process') {
-		var rimraf = require('rimraf');
-		var wrench = require('wrench');
-		// Remove existing target
-		rimraf.sync(Environment.conf.target);
-		// Copy source to target
-		wrench.copyDirSyncRecursive(Environment.conf.source, Environment.conf.target);
+		if(Environment.conf.target == './_site/') {
+			var dirName = '/tmp/restatic_temp/';
+			console.log(Environment.conf.source);
+			console.log(dirName);
+
+			// Create temporary target
+			fs.mkdirSync(dirName, 0777);
+
+			// Copy source to temporary target
+			wrench.copyDirSyncRecursive(Environment.conf.source, dirName);
+			// Remove existing target
+			rimraf.sync(Environment.conf.target);
+
+			// Create target
+			fs.mkdirSync(Environment.conf.target, 0777);
+
+			// Copy source to target
+			wrench.copyDirSyncRecursive(dirName, Environment.conf.target);
+
+			// Remove temporary target
+			rimraf.sync(dirName);
+		} else {
+			// Remove existing target
+			rimraf.sync(Environment.conf.target);
+
+			// Create target
+			fs.mkdirSync(Environment.conf.target, 0777);
+
+			// Copy source to target
+			wrench.copyDirSyncRecursive(Environment.conf.source, Environment.conf.target);
+		}
 		
 		rimraf(Environment.conf.target + '/.git', function (result) {
 			rimraf(Environment.conf.target + '/.gitignore', function (result) {
@@ -66,7 +96,7 @@ Environment.prototype.prepareEnvironment = function () {
 	}
 }
 
-Environment.prototype.fixConf = function () {
+Environment.prototype.fixConf = function (args) {
 	// Slice ending slash if exist
 	if(Environment.conf.source.charAt(Environment.conf.source.length - 1) == '/') {
 		Environment.conf.source = Environment.conf.source.slice(0, -1);
@@ -74,12 +104,12 @@ Environment.prototype.fixConf = function () {
 
 	if(Environment.conf.source == '-d') {
 		Environment.conf.source = './';
-		Environment.conf.target = './_site';
+		Environment.conf.target = './_site/';
+		Environment.conf.mode = args[1];
 	}
 }
 
 Environment.prototype.checkResults = function () {
-	var fs = require('fs');
 	var result = true;
 
 	console.log('Testing validity of input data - config etc.');
