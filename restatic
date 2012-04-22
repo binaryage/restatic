@@ -1,6 +1,4 @@
 #!/bin/bash
 
-BASH_LOCATION=$(dirname "${BASH_SOURCE[0]}")
-
-node $BASH_LOCATION/src/restatic.js $1 $2 fetch
-node $BASH_LOCATION/src/restatic.js $1 $2 process
+node ~/.restatic/src/restatic.js $1 $2 fetch
+node ~/.restatic/src/restatic.js $1 $2 process
