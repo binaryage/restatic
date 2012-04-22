@@ -33,8 +33,6 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 }
 
 Environment.prototype.loadExtractor = function (defaultExtractor) {
-	
-
 	if((Environment.conf.extractor != 'defaultExtractor') || (typeof Environment.conf.extractor != undefined)) {
 		if(path.existsSync(Environment.conf.extractor)) {
 			Environment.extractor = Environment.conf.extractor;
@@ -155,8 +153,8 @@ Environment.prototype.fixEndingSlash = function (path) {
 
 Environment.prototype.loadLineArgs = function (args) {
 	if(typeof args[0] != undefined) {
+		Environment.conf.source = this.fixEndingSlash(args[0]);
 		if(typeof args[1] != undefined) {
-			Environment.conf.source = this.fixEndingSlash(args[0]);
 			Environment.conf.target = this.fixEndingSlash(args[1]);
 			if(typeof args[2] != undefined) {
 				Environment.conf.mode = args[2];

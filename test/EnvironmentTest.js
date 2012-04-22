@@ -31,3 +31,13 @@ describe('Environment', function(){
   		config.extractor.should.equal('./extractors/GooDataExtractor.js');
   	});
 });
+
+/*
+describe('Environment', function(){
+    it('should be able to set source config when option -d is active', function() {
+      Environment.loadLineArgs({0: '-d', 1: ''});
+      Environment.fixConf({0: '-d', 1: ''});
+      Environment.conf.target.should.equal('./_site/');
+    });
+});
+*/
