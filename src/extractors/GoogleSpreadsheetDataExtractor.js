@@ -1,9 +1,9 @@
 var ansi = require('ansi');
 var cursor = ansi(process.stdout);
 
-var GooDataExtractor = function () {};
+var GoogleSpreadsheetDataExtractor = function () {};
 
-GooDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
+GoogleSpreadsheetDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
 	this.mineData(key, function (data) { 
 		delimiters = delimiters.replace(' ', '');
 		delimiters = delimiters.split(',');
@@ -27,7 +27,7 @@ GooDataExtractor.prototype.extract = function (key, delimiters, target, callback
 	});
 }
  
-GooDataExtractor.prototype.mineData = function (key, callback) {
+GoogleSpreadsheetDataExtractor.prototype.mineData = function (key, callback) {
 	var http = require('http');
 
 	var xml = [];
@@ -68,4 +68,4 @@ GooDataExtractor.prototype.mineData = function (key, callback) {
 	download(1);
 }
 
-module.exports = GooDataExtractor;
+module.exports = GoogleSpreadsheetDataExtractor;

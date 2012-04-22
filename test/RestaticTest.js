@@ -4,7 +4,7 @@ var Environment = new Environment();
 var SiteParser = require('../src/SiteParser.js');
 var SiteParser = new SiteParser();
 
-var Extractor = require('../src/extractors/GooDataExtractor.js');
+var Extractor = require('../src/extractors/GoogleSpreadsheetDataExtractor.js');
 var Extractor = new Extractor();
 
 // Environment specific

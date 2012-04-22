@@ -28,7 +28,7 @@ describe('Environment', function(){
 describe('Environment', function(){
   	it('should be able to set extractor config variable from right configfile', function() {
   		var config = Environment.prepare({0: source, 1: target}, config_file);
-  		config.extractor.should.equal('./extractors/GooDataExtractor.js');
+  		config.extractor.should.equal('./extractors/GoogleSpreadsheetDataExtractor.js');
   	});
 });
 

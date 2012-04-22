@@ -18,7 +18,7 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 	this.fixConf(lineArgs);
 
 	this.loadConfigFile(configFile);
-	this.loadExtractor('./extractors/GooDataExtractor.js');
+	this.loadExtractor('./extractors/GoogleSpreadsheetDataExtractor.js');
 
 	// Prepare environment
 	this.prepareEnvironment();
