@@ -1,5 +1,5 @@
 {
-  "name": "Restatic",
+  "name": "restatic",
   "version": "0.0.1",
   "description": "Pumps spreadsheet data to your static web!",
   "license": "BSD License",
@@ -29,10 +29,6 @@
   },
 
   "scripts": {
-    "install": "",
-    "restatic": "./restatic",
-    "restatic-fetch": "./restatic-fetch",
-    "restatic-process": "./restatic-process",
     "test": "make test"
   }
 }
