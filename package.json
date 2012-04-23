@@ -1,6 +1,6 @@
 {
   "name": "restatic",
-  "version": "0.0.2",
+  "version": "0.3",
   "description": "Pumps spreadsheet data to your static web!",
   "license": "BSD License",
 
@@ -29,6 +29,7 @@
   },
 
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "install": "link /usr/local/lib/node_modules/Restatic/restatic /usr/sbin/restatic"
   }
 }
