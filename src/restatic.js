@@ -10,7 +10,6 @@ var Environment = new Environment();
 
 // Config load
 var config = Environment.prepare(process.argv.splice(2), 'restatic.json');
-
 // Extractor setup
 var Extractor = require(config.extractor);
 var Extractor = new Extractor();
@@ -27,7 +26,7 @@ if (config) {
   			break;
 
 		case 'process':
-			cursor.green().write('Restatic started parsing html files from').blue().write(config.source).reset().write(' to ').blue().write(config.target).write('\n').reset();
+			cursor.green().write('Restatic started parsing html files from').blue().write(config.source).reset().write(' to ').blue().write(config.target).green().write(' using ').blue().write(config.extractorName).write('\n').reset();
 			Environment.loadData(config.source, config.target, SiteParser.parse);
  			
   			break;

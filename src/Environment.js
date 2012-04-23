@@ -11,6 +11,8 @@ Environment.conf = {};
 Environment.extractor = '';
 
 Environment.prototype.prepare = function (lineArgs, configFile) {
+	var defaultExtractor = 'GoogleSpreadsheetDataExtractor';
+
 	// Load raw data
 	this.loadLineArgs(lineArgs);
 
@@ -18,14 +20,13 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 	this.fixConf(lineArgs);
 
 	this.loadConfigFile(configFile);
-	this.loadExtractor('./extractors/GoogleSpreadsheetDataExtractor.js');
+	this.loadExtractor(defaultExtractor);
 
 	// Prepare environment
 	this.prepareEnvironment();
 
 	// Check the result
 	if(this.checkResults()) {
-		Environment.conf.extractor = Environment.extractor;
 		return Environment.conf;
 	} else {
 		return false;
@@ -33,17 +34,21 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 }
 
 Environment.prototype.loadExtractor = function (defaultExtractor) {
-	if((Environment.conf.extractor != 'defaultExtractor') || (typeof Environment.conf.extractor != undefined)) {
-		if(path.existsSync(Environment.conf.extractor)) {
-			Environment.extractor = Environment.conf.extractor;
-		} else  {
-			Environment.extractor = defaultExtractor;	
+	Environment.conf.extractorName = Environment.conf.extractor;
+	var extractor = Environment.conf.extractor;
+	var nativeExtractor = __dirname + '/extractors/' + extractor + '.js';
+	defaultExtractor = __dirname + '/extractors/' + defaultExtractor + '.js';
+	
+	if(!path.existsSync(extractor)) { // Check if given extractor exists
+		if(!path.existsSync(nativeExtractor)) { // Check if given extractor exists in extractors dir
+			extractor = defaultExtractor; // Set default extractor exists
+		} else {
+			extractor = nativeExtractor;
 		}
-	} else {
-		Environment.extractor = defaultExtractor;
 	}
 
-	Environment.conf.extractor = Environment.extractor;
+	Environment.conf.extractor = extractor;
+	console.log(Environment.conf.extractor);
 }
 
 Environment.prototype.prepareEnvironment = function () {

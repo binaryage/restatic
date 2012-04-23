@@ -4,7 +4,7 @@ var cursor = ansi(process.stdout);
 var GoogleSpreadsheetDataExtractor = function () {};
 
 GoogleSpreadsheetDataExtractor.prototype.extract = function (key, delimiters, target, callback) {
-	this.mineData(key, function (data) { 
+	this.mineData(key, function (data) {
 		delimiters = delimiters.replace(' ', '');
 		delimiters = delimiters.split(',');
 
@@ -23,6 +23,7 @@ GoogleSpreadsheetDataExtractor.prototype.extract = function (key, delimiters, ta
 				}
 			}
 		}
+		console.log(result);
 		callback(result, target);
 	});
 }
