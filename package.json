@@ -30,6 +30,6 @@
 
   "scripts": {
     "test": "make test",
-    "install": "link /usr/local/lib/node_modules/Restatic/restatic /usr/sbin/restatic"
+    "install": "link /usr/local/lib/node_modules/restatic/restatic /usr/sbin/restatic"
   }
 }
