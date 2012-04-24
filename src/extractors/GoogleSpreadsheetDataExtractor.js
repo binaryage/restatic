@@ -23,7 +23,6 @@ GoogleSpreadsheetDataExtractor.prototype.extract = function (key, delimiters, ta
 				}
 			}
 		}
-		console.log(result);
 		callback(result, target);
 	});
 }

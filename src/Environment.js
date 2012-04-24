@@ -8,17 +8,12 @@ var path = require('path');
 var Environment = function () {};
 
 Environment.conf = {};
-Environment.extractor = '';
 
 Environment.prototype.prepare = function (lineArgs, configFile) {
 	var defaultExtractor = 'GoogleSpreadsheetDataExtractor';
 
-	// Load raw data
+	// Load
 	this.loadLineArgs(lineArgs);
-
-	// Fix it
-	this.fixConf(lineArgs);
-
 	this.loadConfigFile(configFile);
 	this.loadExtractor(defaultExtractor);
 
@@ -34,35 +29,34 @@ Environment.prototype.prepare = function (lineArgs, configFile) {
 }
 
 Environment.prototype.loadExtractor = function (defaultExtractor) {
-	Environment.conf.extractorName = Environment.conf.extractor;
 	var extractor = Environment.conf.extractor;
 	var nativeExtractor = __dirname + '/extractors/' + extractor + '.js';
-	defaultExtractor = __dirname + '/extractors/' + defaultExtractor + '.js';
+	defaultExtractorFullPath = __dirname + '/extractors/' + defaultExtractor + '.js';
 	
 	if(!path.existsSync(extractor)) { // Check if given extractor exists
 		if(!path.existsSync(nativeExtractor)) { // Check if given extractor exists in extractors dir
-			extractor = defaultExtractor; // Set default extractor exists
+			extractor = defaultExtractorFullPath; // Set default extractor exists
+			Environment.conf.extractorName = defaultExtractor;
 		} else {
+			Environment.conf.extractorName = extractor;
 			extractor = nativeExtractor;
 		}
 	}
 
 	Environment.conf.extractor = extractor;
-	console.log(Environment.conf.extractor);
 }
 
 Environment.prototype.prepareEnvironment = function () {
 	if(Environment.conf.mode == 'process') {
 		if(Environment.conf.target == './_site/') {
 			var dirName = '/tmp/restatic_temp/';
-			console.log(Environment.conf.source);
-			console.log(dirName);
 
 			// Create temporary target
 			fs.mkdirSync(dirName, 0777);
 
 			// Copy source to temporary target
 			wrench.copyDirSyncRecursive(Environment.conf.source, dirName);
+
 			// Remove existing target
 			rimraf.sync(Environment.conf.target);
 
@@ -99,52 +93,16 @@ Environment.prototype.prepareEnvironment = function () {
 	}
 }
 
-Environment.prototype.fixConf = function (args) {
-	// Slice ending slash if exist
-	if(Environment.conf.source.charAt(Environment.conf.source.length - 1) == '/') {
-		Environment.conf.source = Environment.conf.source.slice(0, -1);
-	}
-
-	if(Environment.conf.source == '-d') {
-		Environment.conf.source = './';
-		Environment.conf.target = './_site/';
-		Environment.conf.mode = args[1];
-	}
-}
-
-Environment.prototype.checkResults = function () {
-	var result = true;
-
-	console.log('Testing validity of input data - config etc.');
-
-	if(typeof Environment.conf.source) {
-		var targetStats = fs.lstatSync(Environment.conf.source);
-		if(!targetStats.isDirectory()) {
-			console.log('Source dir doesn\'t exists.');
-			result = false;
-		}
-	} else {
-		console.log('Source dir isn\'t specified correctly in config file.');
-		result = false;
-	}
-
-	return result;
-}
-
 Environment.prototype.loadConfigFile = function (fileName) {
-	var fs = require('fs');
-	var contents = fs.readFileSync(Environment.conf.source + '/' + fileName);
-  	var config = JSON.parse(contents);
+	if(typeof Environment.conf.source != 'undefined') {
+		var contents = fs.readFileSync(Environment.conf.source + '/' + fileName);
+  		var config = JSON.parse(contents);
+  	}
 
-  	if(typeof config != undefined) {
-  		Environment.conf.googleSpreadSheetKey = config.googleSpreadSheetKey;
+  	if(typeof config != 'undefined') {
+  		Environment.conf.apiKey = config.apiKey;
   		Environment.conf.delimiter = config.delimiter;
-
-  		if(typeof config.extractor != undefined) {
-  			Environment.conf.extractor = config.extractor;
-  		} else {
-  			Environment.conf.extractor = 'defaultExtractor';
-  		}
+		Environment.conf.extractor = config.extractor;
   	}
 }
 
@@ -157,27 +115,34 @@ Environment.prototype.fixEndingSlash = function (path) {
 }
 
 Environment.prototype.loadLineArgs = function (args) {
-	if(typeof args[0] != undefined) {
-		Environment.conf.source = this.fixEndingSlash(args[0]);
-		if(typeof args[1] != undefined) {
-			Environment.conf.target = this.fixEndingSlash(args[1]);
-			if(typeof args[2] != undefined) {
-				Environment.conf.mode = args[2];
-			} else {
-				Environment.conf.mode = 'both';
-			}
-			Environment.conf.checked = true;
+	var checked = true;
+
+	if(args[0] != '-d')  {
+		if(typeof args[0] != 'undefined') {
+			Environment.conf.source = this.fixEndingSlash(args[0]);
 		} else {
-			console.log('Source is undefined in given arguments!');
+			checked = false;
+		}
+
+		if(typeof args[1] != 'undefined') {
+			Environment.conf.target = this.fixEndingSlash(args[1]);
+		} else {
+			checked = false;
+		}
+
+		if(typeof args[2] != 'undefined') {
+			Environment.conf.mode = args[2];
 		}
 	} else {
-		console.log('Target is undefined in given arguments!');
+		Environment.conf.source = './';
+		Environment.conf.target = './_site/';
+		Environment.conf.mode = args[1];
 	}
+
+	return checked;
 }
 
 Environment.prototype.storeResult = function (data, target) {
-	var fs = require('fs');
-
 	// Get length
 	var i = 0;
 	for(var key in data) {i++}
@@ -196,15 +161,49 @@ Environment.prototype.storeResult = function (data, target) {
 	}
 	json += '}';
 
-	var log = fs.createWriteStream(target + '/data.json', {'flags': 'w'});
+	var log = fs.createWriteStream(target + 'data.json', {'flags': 'w'});
 	log.end(json + "\n");
-	cursor.green().write('Data fetched in ').blue().write(target + '/data.json').reset().write("\n");
+	cursor.green().write('Data fetched in ').blue().write(target + 'data.json').reset().reset().write("\n");
 }
 
 Environment.prototype.loadData = function (source, target, callback) {
-	var fs = require('fs');
-
 	callback(JSON.parse(fs.readFileSync(target + 'data.json').toString()), target);
+}
+
+Environment.prototype.checkResults = function () {
+	var result = true;
+
+	if(typeof Environment.conf.source != 'undefined') {
+		if(!path.existsSync(Environment.conf.source)) {
+			cursor.red().write('Source dir doesn\'t exists.').reset().write("\n");
+			result = false;
+		}
+	} else {
+		cursor.red().write('Source dir isn\'t specified correctly in config file.').reset().write("\n");
+		result = false;
+	}
+
+	if(typeof Environment.conf.target != 'undefined') {
+		if(!path.existsSync(Environment.conf.target)) {
+			// Create target
+			fs.mkdirSync(Environment.conf.target, 0777);
+		}
+	} else {
+		cursor.red().write('Target dir isn\'t specified correctly in config file.').reset().write("\n");
+		result = false;
+	}
+
+	if(typeof Environment.conf.apiKey == 'undefined') {
+		cursor.red().write('API key isn\'t specified correctly in configfile.').reset().write("\n");
+		result = false;
+	}
+
+	if(typeof Environment.conf.delimiter == 'undefined') {
+		cursor.red().write('Delimiter isn\'t specified correctly in configfile.').reset().write("\n");
+		result = false;
+	}
+
+	return result;
 }
 
 module.exports = Environment;

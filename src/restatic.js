@@ -10,29 +10,30 @@ var Environment = new Environment();
 
 // Config load
 var config = Environment.prepare(process.argv.splice(2), 'restatic.json');
-// Extractor setup
-var Extractor = require(config.extractor);
-var Extractor = new Extractor();
 
 // Restatic
-if (config) {
+if(config != false) {
+	// Extractor setup
+	var Extractor = require(config.extractor);
+	var Extractor = new Extractor();
+
 	switch(config.mode)
 	{
 		case 'fetch':
  			cursor.green().write('Restatic started fetching data from spreadsheet defined in ').blue().write(config.source + 'restatic.json').reset().write(' to ').blue().write(config.target).write('\n').reset();
- 			Extractor.extract(config.googleSpreadSheetKey, config.delimiter, config.target, function (data, target) {
+ 			Extractor.extract(config.apiKey, config.delimiter, config.target, function (data, target) {
  				Environment.storeResult(data, config.source);
  			});
   			break;
 
 		case 'process':
-			cursor.green().write('Restatic started parsing html files from').blue().write(config.source).reset().write(' to ').blue().write(config.target).green().write(' using ').blue().write(config.extractorName).write('\n').reset();
+			cursor.green().write('Restatic started parsing html files from ').blue().write(config.source).reset().write(' to ').blue().write(config.target).green().write(' using ').blue().write(config.extractorName).write('\n').reset();
 			Environment.loadData(config.source, config.target, SiteParser.parse);
  			
   			break;
 		default:
   			cursor.green().write('Restatic started parsing html files from ').blue().write(config.source).reset().write(' to ').blue().write(config.target).write('\n').reset();
-			Extractor.extract(config.googleSpreadSheetKey, config.delimiter, config.target, SiteParser.parse);
+			Extractor.extract(config.apiKey, config.delimiter, config.target, SiteParser.parse);
 
 	}
 } else {
