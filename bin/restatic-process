@@ -1,0 +1,3 @@
+#!/bin/bash
+
+node ../src/restatic.js $1 $2 process

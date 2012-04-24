@@ -1,4 +1,0 @@
-#!/bin/bash
-
-node ./src/restatic.js $1 $2 fetch
-node ./src/restatic.js $1 $2 process

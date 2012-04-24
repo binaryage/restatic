@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "description": "Pumps spreadsheet data to your static web!",
   "license": "BSD License",
-  "bin": "./restatic",
+  "bin": "./bin/restatic",
 
   "contributors" : [ 
     {
