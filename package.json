@@ -3,6 +3,7 @@
   "version": "0.0.3",
   "description": "Pumps spreadsheet data to your static web!",
   "license": "BSD License",
+  "bin": "./restatic",
 
   "contributors" : [ 
     {
@@ -29,7 +30,6 @@
   },
 
   "scripts": {
-    "test": "make test",
-    "install": "rm /usr/sbin/restatic && link /usr/local/lib/node_modules/restatic/restatic /usr/sbin/restatic"
+    "test": "make test"
   }
 }
