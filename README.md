@@ -21,5 +21,4 @@ When you launch restatic, it will:
 Extend the class Extractor and write function `extract` which will return the associative array with markup in key and data in value - eg. `{ "/-Posts-2B-/": "Hello world" }`
 
 ## And its installable throught NPM
-
-`npm install https://github.com/binaryage/restatic/tarball/v0.3`
+`npm install restatic`
