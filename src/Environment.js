@@ -47,7 +47,7 @@ Environment.prototype.loadExtractor = function (defaultExtractor) {
 }
 
 Environment.prototype.prepareEnvironment = function () {
-	if(Environment.conf.mode == 'process') {
+	if(Environment.conf.mode != 'fetch') {
 		if(Environment.conf.target == './_site/') {
 			var dirName = '/tmp/restatic_temp/';
 
@@ -95,7 +95,7 @@ Environment.prototype.prepareEnvironment = function () {
 
 Environment.prototype.loadConfigFile = function (fileName) {
 	if(typeof Environment.conf.source != 'undefined') {
-		var contents = fs.readFileSync(Environment.conf.source + '/' + fileName);
+		var contents = fs.readFileSync(Environment.conf.source + fileName);
   		var config = JSON.parse(contents);
   	}
 
@@ -119,13 +119,13 @@ Environment.prototype.loadLineArgs = function (args) {
 
 	if(args[0] != '-d')  {
 		if(typeof args[0] != 'undefined') {
-			Environment.conf.source = this.fixEndingSlash(args[0]);
+			Environment.conf.source = this.fixEndingSlash(path.resolve(args[0]));
 		} else {
 			checked = false;
 		}
 
 		if(typeof args[1] != 'undefined') {
-			Environment.conf.target = this.fixEndingSlash(args[1]);
+			Environment.conf.target = this.fixEndingSlash(path.resolve(args[1]));
 		} else {
 			checked = false;
 		}
