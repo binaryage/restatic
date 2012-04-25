@@ -47,7 +47,7 @@ Environment.prototype.loadExtractor = function (defaultExtractor) {
 }
 
 Environment.prototype.prepareEnvironment = function () {
-	if(Environment.conf.mode != 'fetch') {
+	if((Environment.conf.mode != 'fetch') && ((typeof Environment.conf.source != 'undefined') || (typeof Environment.conf.target != 'undefined')))  {
 		if(Environment.conf.target == './_site/') {
 			var dirName = '/tmp/restatic_temp/';
 
