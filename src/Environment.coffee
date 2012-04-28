@@ -4,17 +4,25 @@ rimraf = require("rimraf")
 wrench = require("wrench")
 fs = require("fs")
 path = require("path")
+
 Environment = ->
 
 Environment.conf = {}
+Environment.conf.finished = false;
+
 Environment::prepare = (lineArgs, configFile) ->
   defaultExtractor = "GoogleSpreadsheetDataExtractor"
   @loadLineArgs lineArgs
-  @loadConfigFile configFile
-  @loadExtractor defaultExtractor
-  @prepareEnvironment()
-  if @checkResults()
-    Environment.conf
+
+  if Environment.conf.finished is false
+    @loadConfigFile configFile
+    @loadExtractor defaultExtractor
+    @prepareEnvironment()
+
+    if @checkResults()
+      Environment.conf
+    else
+      false
   else
     false
 
@@ -66,8 +74,21 @@ Environment::fixEndingSlash = (path) ->
   else
     path
 
+Environment::throwHelp = () ->
+  cursor.white().write("Restatic - (c) 2012 - Binaryage.com").reset().write "\n"
+  cursor.grey().write("Options:").reset().write "\n"
+  cursor.grey().write(" * restatic /path/to/source /path/to/target").reset().write "\n"
+  cursor.grey().write(" * restatic /path/to/source /path/to/target fetch - will only fetch data from given data source to data.json file").reset().write "\n"
+  cursor.grey().write(" * restatic /path/to/source /path/to/target process - will only parse data from data.json file").reset().write "\n"
+  cursor.grey().write(" * restatic -d").reset().write "\n"
+  Environment.conf.finished = true;
+
 Environment::loadLineArgs = (args) ->
   checked = true
+
+  if args[0] is "-h" or args[0] is "--help"
+    @throwHelp()
+
   unless args[0] is "-d"
     unless typeof args[0] is "undefined"
       Environment.conf.source = @fixEndingSlash(path.resolve(args[0]))
@@ -107,6 +128,7 @@ Environment::loadData = (source, target, callback) ->
 
 Environment::checkResults = ->
   result = true
+
   unless typeof Environment.conf.source is "undefined"
     unless path.existsSync(Environment.conf.source)
       cursor.red().write("Source dir doesn't exists.").reset().write "\n"

@@ -42,5 +42,7 @@ if(config != false) {
 
 	}
 } else {
-	cursor.green().write("Usage: parse google docs spreadsheet content using 'restatic source_folder target_folder' or \'restatic -d\' if you want to generate site from actual location to folder _site '\n").reset();
+	if(config.finished == false) {
+		cursor.green().write("Usage: parse google docs spreadsheet content using 'restatic source_folder target_folder' or \'restatic -d\' if you want to generate site from actual location to folder _site '\n").reset();
+	}
 }
