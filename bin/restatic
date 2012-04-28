@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 // Libraries setup
-var Environment = require('../src/Environment.js');
-var SiteParser = require('../src/SiteParser.js');
+require('coffee-script');
+
+var Environment = require('../src/Environment.coffee');
+var SiteParser = require('../src/SiteParser.coffee');
+
 var ansi = require('ansi');
 var cursor = ansi(process.stdout);
 
@@ -15,7 +18,7 @@ var config = Environment.prepare(process.argv.splice(2), 'restatic.json');
 
 // Restatic
 if(config != false) {
-	// Extractor setup
+    // Extractor setup
 	var Extractor = require(config.extractor);
 	var Extractor = new Extractor();
 

@@ -1,6 +1,6 @@
 {
   "name": "restatic",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Pumps spreadsheet data to your static web!",
   "license": "BSD License",
   "bin": "./bin/restatic",
@@ -17,6 +17,7 @@
   ],
 
   "dependencies": {
+    "coffee-script": "1",
     "rimraf": "~2.0.1",
     "wrench": "~1.3.8",
     "ansi": "~0.1.0"
