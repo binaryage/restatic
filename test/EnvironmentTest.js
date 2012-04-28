@@ -1,14 +1,23 @@
-var Environment = require('../src/Environment.js');
+require('coffee-script');
+
+var Environment = require('../src/Environment.coffee');
 var Environment = new Environment();
-var source = '../source_folder_example/';
-var target = '../target_folder_example/';
+
+var source = './test/demo_data/source_folder_example';
+var target = './test/demo_data/target_folder_example';
+
 var config_file = 'restatic.json';
 var path = require('path');
 
 describe('Environment', function(){
   	it('should be able to check if environment were setted up', function() {
   		var config = Environment.prepare({0: source, 1: target}, config_file);
-  		config.source.should.equal(source);
+      var result;
+
+      var result = path.existsSync(config.source);
+      console.log(result);
+
+      result.should.equal(true);
   	});
 });
 
