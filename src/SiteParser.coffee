@@ -22,7 +22,7 @@ SiteParser::parse = (data, target) ->
         i++
     content = fs.readFileSync(file, "utf8").toString()
     if i is 0
-      console.log "Nothing to update in " + file
+      cursor.white().write("Nothing to update in " + file).reset().write "\n"
     else
       i = 0
     cursor.green().write("Parsing done in ").blue().write(target).reset().write "\n"  if j is SiteParser.filesToParse.length

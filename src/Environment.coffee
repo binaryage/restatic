@@ -121,6 +121,7 @@ Environment::storeResult = (data, target) ->
     flags: "w"
   )
   log.end json + "\n"
+
   cursor.green().write("Data fetched in ").blue().write(target + "data.json").reset().reset().write "\n"
 
 Environment::loadData = (source, target, callback) ->
