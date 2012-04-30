@@ -14,13 +14,7 @@ var SiteParser = new SiteParser();
 var Environment = new Environment();
 
 // Config load
-var config = Environment.prepare(process.argv.splice(2), 'restatic.json');
-/*
-config.excludable = new Array();
-config.excludable.push("index.html");
-*/
-
-console.log(config.excludable);
+var config = Environment.prepare(process.argv.splice(2));
 
 // Restatic
 if(config != false) {
@@ -39,13 +33,12 @@ if(config != false) {
 
 		case 'process':
 			cursor.green().write('Restatic started parsing html files from ').blue().write(config.source).reset().write(' to ').blue().write(config.target).green().write(' using ').blue().write(config.extractorName).write('\n').reset();
-			Environment.loadData(config.source, config.target, config.excludable, SiteParser.parse);
- 			
+			Environment.loadData(config.source, config.target, config.excludable, SiteParser.parse);			
   			break;
+
 		default:
   			cursor.green().write('Restatic started parsing html files from ').blue().write(config.source).reset().write(' to ').blue().write(config.target).write('\n').reset();
 			Extractor.extract(config.apiKey, config.delimiter, config.target, config.excludable, SiteParser.parse);
-
 	}
 } else {
 	if(config.finished == false) {

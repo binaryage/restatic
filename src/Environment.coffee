@@ -9,16 +9,16 @@ Environment = ->
 
 Environment.conf = {}
 Environment.conf.finished = false;
+Environment.conf.defaultConfigFile = 'restatic.json';
 
-Environment::prepare = (lineArgs, configFile) ->
+Environment::prepare = (lineArgs) ->
   defaultExtractor = "GoogleSpreadsheetDataExtractor"
   @loadLineArgs lineArgs
-
   if Environment.conf.finished is false
-    @loadConfigFile configFile
+    @loadConfigFile()
     @loadExtractor defaultExtractor
     @prepareEnvironment()
-
+  
     if @checkResults()
       Environment.conf
     else
@@ -58,16 +58,25 @@ Environment::prepareEnvironment = ->
     toBeDeleted = {
       ".git", 
       "/.gitignore", 
-      "/_site", "/.DS_Store", "/restatic.json"
+      "/_site", 
+      "/.DS_Store", 
+      "/restatic.json"
     }
 
     for i of toBeDeleted
       rimraf Environment.conf.target + "/" + toBeDeleted[i], (result) ->
 
-Environment::loadConfigFile = (fileName) ->
-  unless typeof Environment.conf.source is "undefined"
-    contents = fs.readFileSync(Environment.conf.source + fileName)
-    config = JSON.parse(contents)
+Environment::loadConfigFile = () ->
+  unless path.existsSync(Environment.conf.configFile)
+    unless typeof Environment.conf.source is "undefined"
+      config = Environment.conf.source + Environment.conf.defaultConfigFile;
+  else
+    unless typeof Environment.conf.source is "undefined"
+      config = Environment.conf.configFile;
+
+  contents = fs.readFileSync(config)
+  config = JSON.parse(contents)
+
   unless typeof config is "undefined"
     Environment.conf.apiKey = config.apiKey
     Environment.conf.delimiter = config.delimiter
@@ -104,11 +113,14 @@ Environment::loadLineArgs = (args) ->
       Environment.conf.target = @fixEndingSlash(path.resolve(args[1]))
     else
       checked = false
-    Environment.conf.mode = args[2]  unless typeof args[2] is "undefined"
+    Environment.conf.configFile = args[2] unless typeof args[2] is "undefined"
+    Environment.conf.mode = args[3] unless typeof args[3] is "undefined"
+    
   else
     Environment.conf.source = "./"
     Environment.conf.target = "./_site/"
-    Environment.conf.mode = args[1]
+    Environment.conf.mode = args[2]
+    Environment.conf.configFile = args[1]
   checked
 
 Environment::storeResult = (data, target) ->
@@ -130,8 +142,8 @@ Environment::storeResult = (data, target) ->
 
   cursor.green().write("Data fetched in ").blue().write(target + "data.json").reset().reset().write "\n"
 
-Environment::loadData = (source, target, callback) ->
-  callback JSON.parse(fs.readFileSync(target + "data.json").toString()), target
+Environment::loadData = (source, target, excludable, callback) ->
+  callback JSON.parse(fs.readFileSync(target + "data.json").toString()), target, excludable
 
 Environment::checkResults = ->
   result = true
