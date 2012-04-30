@@ -3,7 +3,7 @@ var cursor = ansi(process.stdout);
 
 var GoogleDocumentExtractor = function () {};
 
-GoogleDocumentExtractor.prototype.extract = function (key, delimiters, target, callback) {
+GoogleDocumentExtractor.prototype.extract = function (key, delimiters, target, excludable, callback) {
 	// Demo data
 	data = { 
 		'/-General-A2-/': 'Your page title', 
@@ -14,7 +14,7 @@ GoogleDocumentExtractor.prototype.extract = function (key, delimiters, target, c
 		'/-Posts-B2-/': 'See project homepage on restatic.binaryage.com or'
 	};
 
-	callback(data, target);
+	callback(data, target, excludable);
 }
 
 module.exports = GoogleDocumentExtractor;

@@ -4,11 +4,11 @@ SiteParser = ->
 
 SiteParser.filesToParse = new Array()
 SiteParser.dirs = new Array()
-SiteParser::parse = (data, target) ->
+SiteParser::parse = (data, target, excludeFileList) ->
   fs = require("fs")
   i = 0
   j = 0
-  SiteParser::prepareData target
+  SiteParser::prepareData target, excludeFileList
   SiteParser.filesToParse.forEach (file) ->
     origin = fs.readFileSync(file, "utf8").toString()
     updated = origin
@@ -27,13 +27,13 @@ SiteParser::parse = (data, target) ->
       i = 0
     cursor.green().write("Parsing done in ").blue().write(target).reset().write "\n"  if j is SiteParser.filesToParse.length
 
-SiteParser::prepareData = (target) ->
+SiteParser::prepareData = (target, excludeFileList) ->
   fs = require("fs")
   dir = fs.readdirSync(target)
   SiteParser.dirs[0] = target
   SiteParser::walkThrought dir, target
   SiteParser.dirs.forEach (dir) ->
-    SiteParser::indexDir fs.readdirSync(dir), dir
+    SiteParser::indexDir fs.readdirSync(dir), dir, excludeFileList
 
 SiteParser::walkThrought = (dir, path) ->
   fs = require("fs")
@@ -52,16 +52,22 @@ SiteParser::walkThrought = (dir, path) ->
   else
     true
 
-SiteParser::indexDir = (dir, path) ->
+SiteParser::indexDir = (dir, path, excludeFileList) ->
   i = SiteParser.filesToParse.length
-  path = path.slice(0, -1)  if path.charAt(path.length - 1) is "/"
+  path = path.slice(0, -1) if path.charAt(path.length - 1) is "/"
+
   dir.forEach (file) ->
+    includable = false
     if file.substr(-5) is ".html"
-      SiteParser.filesToParse[i] = path + "/" + file
-      i++
+      includable = true
     else
       if file.substr(-4) is ".htm"
-        SiteParser.filesToParse[i] = path + "/" + file
-        i++
+        includable = true
+
+    for j of excludeFileList
+      i++ if file is excludeFileList[i]
+      includable = false if file is excludeFileList[j]
+
+    SiteParser.filesToParse.push path + "/" + file  if includable
 
 module.exports = SiteParser

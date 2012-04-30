@@ -40,7 +40,7 @@ Environment::loadExtractor = (defaultExtractor) ->
   Environment.conf.extractor = extractor
 
 Environment::prepareEnvironment = ->
-  if (Environment.conf.mode isnt "fetch") and (typeof Environment.conf.source isnt "undefined") or (typeof Environment.conf.target isnt "undefined")
+  if (Environment.conf.mode isnt "fetch") and (typeof Environment.conf.source isnt "undefined") || (typeof Environment.conf.target isnt "undefined")
     if Environment.conf.target is "./_site/"
       dirName = "/tmp/restatic_temp/"
       fs.mkdirSync dirName, 0o777
@@ -53,11 +53,16 @@ Environment::prepareEnvironment = ->
       rimraf.sync Environment.conf.target
       fs.mkdirSync Environment.conf.target, 0o777
       wrench.copyDirSyncRecursive Environment.conf.source, Environment.conf.target
-    rimraf Environment.conf.target + "/.git", (result) ->
-      rimraf Environment.conf.target + "/.gitignore", (result) ->
-        rimraf Environment.conf.target + "/_site", (result) ->
-          rimraf Environment.conf.target + "/.DS_Store", (result) ->
-            rimraf Environment.conf.target + "/restatic.json", (result) ->
+
+      
+    toBeDeleted = {
+      ".git", 
+      "/.gitignore", 
+      "/_site", "/.DS_Store", "/restatic.json"
+    }
+
+    for i of toBeDeleted
+      rimraf Environment.conf.target + "/" + toBeDeleted[i], (result) ->
 
 Environment::loadConfigFile = (fileName) ->
   unless typeof Environment.conf.source is "undefined"
@@ -67,6 +72,7 @@ Environment::loadConfigFile = (fileName) ->
     Environment.conf.apiKey = config.apiKey
     Environment.conf.delimiter = config.delimiter
     Environment.conf.extractor = config.extractor
+    Environment.conf.excludable = config.excludeFileList
 
 Environment::fixEndingSlash = (path) ->
   unless path.charAt(path.length - 1) is "/"
