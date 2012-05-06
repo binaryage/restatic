@@ -20,6 +20,7 @@ function sleep(milliseconds) {
 
 describe('SiteParser', function(){
   it('should be able to parse data correctly to demo target', function() {
+    console.log('./bin/restatic ' + source + ' ' + target);
     exec('./bin/restatic ' + source + ' ' + target);
     
     sleep(3000);
@@ -28,7 +29,7 @@ describe('SiteParser', function(){
     var content = fs.readFileSync(target + '/snippet.html').toString();
 
     var failed = true;
-    if(content.replace('/-Posts-B1-/', '') != content) {
+    if(content.replace('/-Posts-B1-/', '') == content) {
        failed = false;
     }
 

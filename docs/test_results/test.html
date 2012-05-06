@@ -5,56 +5,49 @@
 		<meta name="description" content="" /> 
 		<title> Test report </title>
 	</head>
-	<body>Testing validity of input data - config etc.
-    <section class="suite">
+	<body>    <section class="suite">
       <h1>Environment</h1>
       <dl>
-Testing validity of input data - config etc.
         <dt>should be able to check if environment were setted up</dt>
         <dd><pre><code>
-		var config = Environment.prepare({0: source, 1: target}, config_file);
-		config.checked.should.equal(true);</code></pre></dd>
+var result = path.existsSync(config.source);
+result.should.equal(true);</code></pre></dd>
       </dl>
     </section>
     <section class="suite">
       <h1>Environment</h1>
       <dl>
-Testing validity of input data - config etc.
         <dt>should be able to set googleSpreadSheetKey config variable from right configfile</dt>
         <dd><pre><code>
-		var config = Environment.prepare({0: source, 1: target}, config_file);
-		config.googleSpreadSheetKey.should.equal('0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E');</code></pre></dd>
+		config.apiKey.should.equal('0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E');</code></pre></dd>
       </dl>
     </section>
     <section class="suite">
       <h1>Environment</h1>
       <dl>
-Testing validity of input data - config etc.
         <dt>should be able to set delimiter config variable from right configfile</dt>
         <dd><pre><code>
-		var config = Environment.prepare({0: source, 1: target}, config_file);
 		config.delimiter.should.equal('/-, -/');</code></pre></dd>
       </dl>
     </section>
     <section class="suite">
       <h1>Environment</h1>
       <dl>
-Testing validity of input data - config etc.
         <dt>should be able to set extractor config variable from right configfile</dt>
         <dd><pre><code>
-		var config = Environment.prepare({0: source, 1: target}, config_file);
-		config.extractor.should.equal('./extractors/GoogleSpreadsheetDataExtractor.js');</code></pre></dd>
+var result = path.existsSync(config.extractor);
+  		result.should.equal(true);</code></pre></dd>
       </dl>
     </section>
     <section class="suite">
       <h1>GoogleSpreadsheetDataExtractor</h1>
       <dl>
-[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/1/public/values?alt=json[0m ... OK
-[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/2/public/values?alt=json[0m ... OK
-[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/3/public/values?alt=json[0m ... DONE
+ @ Fetching http://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/1/public/values?alt=json ... OK
+ @ Fetching http://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/2/public/values?alt=json ... OK
+ @ Fetching http://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/3/public/values?alt=json ... DONE
         <dt>should be able to extract data from spreadsheet and parse it</dt>
         <dd><pre><code>
-GoogleSpreadsheetDataExtractor.extract(key, delimiters, '', function (data) {
+GoogleSpreadsheetDataExtractor.extract(key, delimiters, '', '', function (data) {
   var result = false;
 
   if(typeof data == 'object') {
@@ -69,18 +62,46 @@ GoogleSpreadsheetDataExtractor.extract(key, delimiters, '', function (data) {
     <section class="suite">
       <h1>SiteParser</h1>
       <dl>
-[36m @ Fetching [34mhttp://spreadsheets.google.com:80/feeds/cells/0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E/1/public/values?alt=json[0m        <dt>should be able to parse data correctly to demo target</dt>
+./bin/restatic ./test/demo_data/source_folder_example ./test/demo_data/target_folder_example ./test/demo_data/restatic_exclude.json
+        <dt>should be able to parse exclude file as is defined in config</dt>
         <dd><pre><code>
-		Extractor.extract(config.googleSpreadSheetKey, config.delimiter, config.target, SiteParser.parse);
-    
-    // Valid for only one spreadsheet
-    var content = fs.readFileSync(target + '/' + 'snippet.html').toString();
-    var failed = false;
-    if(content.replace('/-Posts-B1-/', '') != content) {
-      failed = true;
-    }
+console.log('./bin/restatic ' + source + ' ' + target + ' ' + config_file);
+exec('./bin/restatic ' + source + ' ' + target);
 
-    failed.should.be.false;</code></pre></dd>
+sleep(3000);
+
+// Valid for only one spreadsheet
+var targetFile = fs.readFileSync(target + '/index.html').toString();
+var sourceFile = fs.readFileSync(target + '/index.html').toString();
+
+var failed = false;
+if(targetFile != sourceFile) {
+   failed = true;
+}
+
+failed.should.be.false;</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>SiteParser</h1>
+      <dl>
+./bin/restatic ./test/demo_data/source_folder_example ./test/demo_data/target_folder_example
+        <dt>should be able to parse data correctly to demo target</dt>
+        <dd><pre><code>
+console.log('./bin/restatic ' + source + ' ' + target);
+exec('./bin/restatic ' + source + ' ' + target);
+
+sleep(3000);
+
+// Valid for only one spreadsheet
+var content = fs.readFileSync(target + '/snippet.html').toString();
+
+var failed = true;
+if(content.replace('/-Posts-B1-/', '') == content) {
+   failed = false;
+}
+
+failed.should.be.false;</code></pre></dd>
       </dl>
     </section>
 	</body>
