@@ -48,7 +48,6 @@ class Environment
         
         return {} unless p
         
-        console.log p
         contents = fs.readFileSync(p)
         return {} unless contents
         
