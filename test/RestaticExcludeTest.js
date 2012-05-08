@@ -2,7 +2,7 @@ require('coffee-script');
 
 var exec = require('child_process').exec;
 
-var Extractor = require('../src/extractors/GoogleSpreadsheetDataExtractor.js');
+var Extractor = require('../src/extractors/GoogleSpreadsheet.js');
 var Extractor = new Extractor();
 
 // Environment specific

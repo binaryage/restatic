@@ -4,35 +4,32 @@
   "description": "Pumps spreadsheet data to your static web!",
   "license": "BSD License",
   "bin": "./bin/restatic",
-
-  "contributors" : [ 
+  "contributors": [
     {
       "name": "Jan Palounek",
       "email": "jan@binaryage.com"
-    }, 
+    },
     {
       "name": "Antonin Hildebrand",
       "email": "antonin@binaryage.com"
     }
   ],
-
   "dependencies": {
     "coffee-script": "1",
     "rimraf": "~2.0.1",
     "wrench": "~1.3.8",
-    "ansi": "~0.1.0"
+    "ansi": "~0.1.0",
+    "commander": "~0.6.0",
+    "underscore": "~1.3.3"
   },
-
   "devDependencies": {
-   "should": "~0.6.1",
-   "mocha": "~1.0.1"
+    "should": "~0.6.1",
+    "mocha": "~1.0.1"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/binaryage/restatic"
   },
-
   "scripts": {
     "test": "make test"
   }
