@@ -1,3 +1,0 @@
-[submodule "test/demo_data/source_folder_example"]
-	path = test/demo_data/source_folder_example
-	url = https://github.com/JPalounek/restatic-example
