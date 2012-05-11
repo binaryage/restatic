@@ -1,6 +1,6 @@
 SRC = lib/events.js lib/superagent.js
 
-TESTS = test/*.js
+TESTS = test/*.coffee
 REPORTER = list
 
 all: superagent.js superagent.min.js

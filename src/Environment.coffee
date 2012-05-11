@@ -6,7 +6,7 @@ _ = require("underscore")
 
 defaultConfig =
     config: "restatic.json"
-    source: "."
+    source: "./_site"
     target: "./_restatic"
     extractor: "GoogleSpreadsheet"
     extractorExts: ["js", "coffee"]
@@ -87,7 +87,6 @@ class Environment
         errors = []
         
         errors.push "Source dir doesn't exists." unless path.existsSync(@config.source)
-        errors.push "Target dir doesn't exists. Check the rights." unless path.existsSync(@config.target)
         errors.push "API key isn't specified." unless @config.apiKey
         errors.push "Delimiter isn't specified." unless @config.delimiter
         

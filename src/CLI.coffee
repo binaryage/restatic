@@ -86,14 +86,14 @@ niceJSON = (obj) ->
 effectiveCursor = cursor if env.config.verbose
 console.log("effective config:\n", env.config) if env.config.verbose
 
-# this will create target dir and do other filesystem preparations
-env.bootstrap()
-
 # check the situation
 errors = env.check()
 if errors
     printErrors(env.config, errors)
     process.exit 1
+
+# this will create target dir and do other filesystem preparations
+env.bootstrap()
 
 parser = new SiteParser()
 
