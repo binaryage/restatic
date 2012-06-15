@@ -3,11 +3,13 @@ fs = require("fs")
 
 source = "./test/demo_data/source_folder_example"
 target = "./test/demo_data/target_folder_example"
+config_file = "./test/demo_data/restatic.json"
 
 describe "SiteParser", ->
   it "should be able to parse data correctly to demo target", (done) ->
-    cmd = "./bin/restatic -s " + source + " -t " + target
+    cmd = "./bin/restatic -s " + source + " -t " + target + " -c " + config_file
     exec cmd, ->
-      content = fs.readFileSync(target + "/snippet.html", "utf-8")
-      content.replace("/-Posts-B1-/", "").should.not.be.eql content
+      original = fs.readFileSync(source + "/snippet.html", "utf-8")
+      generated = fs.readFileSync(target + "/snippet.html", "utf-8")
+      generated.should.not.be.eql original
       done()

@@ -95,7 +95,7 @@ if errors
 # this will create target dir and do other filesystem preparations
 env.bootstrap()
 
-parser = new SiteParser()
+parser = new SiteParser(env.config)
 
 # TODO: here should be robust error reporting, imagine syntax errors in the js file
 Extractor = require(env.config.extractorPath)
@@ -112,10 +112,11 @@ switch env.config.mode
     extractor.extract env.config, presentOutput, effectiveCursor
   when "process"
     printProcessInfo env.config
-    data = environment.loadData
+    data = env.loadData
     # TODO allow loading json from pipe
-    # parser.parse ...
-    
-  else
+    parser.parse data, effectiveCursor
+  else # fetch + process 
     printDefaultInfo env.config
-    # TODO: extractor.extract env.config, parser.parse
+    processOutput = (data, config) ->
+        parser.parse data, effectiveCursor
+    extractor.extract env.config, processOutput, effectiveCursor

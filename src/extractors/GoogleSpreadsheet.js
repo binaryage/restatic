@@ -5,7 +5,7 @@ var GoogleSpreadsheetDataExtractor = function () {};
 
 GoogleSpreadsheetDataExtractor.prototype.extract = function (config, callback, cursor) {
     this.mineData(config.apiKey, function (data) {
-        var delimiters = config.delimiter;
+        var delimiters = config.delimiters;
 
         var sheetName = '';
         var result = {};

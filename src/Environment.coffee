@@ -9,9 +9,11 @@ defaultConfig =
   source: "./_site"
   target: "./_restatic"
   extractor: "GoogleSpreadsheet"
+  delimiters: ["/-", "-/"]
   extractorExts: ["js", "coffee"]
   extractorsLocation: path.join(__dirname, "extractors")
   dataFile: "data.json"
+  includablePaths: ".*\.htm?"
   toBeDeleted: [
     ".git"
     ".gitignore"
@@ -88,7 +90,7 @@ class Environment
     
     errors.push "Source dir doesn't exists." unless path.existsSync(@config.source)
     errors.push "API key isn't specified." unless @config.apiKey
-    errors.push "Delimiter isn't specified." unless @config.delimiter
+    errors.push "Delimiters aren't specified." unless @config.delimiters
     
     return unless errors.length
     

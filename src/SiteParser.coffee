@@ -1,73 +1,40 @@
-ansi = require("ansi")
-cursor = ansi(process.stdout)
-SiteParser = ->
+fs = require("fs")
+pathUtils = require("path")
+SiteWalker = require('./SiteWalker')
 
-SiteParser.filesToParse = new Array()
-SiteParser.dirs = new Array()
-SiteParser::parse = (data, target, excludeFileList) ->
-  fs = require("fs")
-  i = 0
-  j = 0
-  SiteParser::prepareData target, excludeFileList
-  SiteParser.filesToParse.forEach (file) ->
-    origin = fs.readFileSync(file, "utf8").toString()
+class SiteParser
+  constructor: (@config) ->
+  
+  parse: (data, cursor, continuation) ->
+    walker = new SiteWalker @config
+    walker.collect @config.target, (files) =>
+      for file in files
+        @process file, data, cursor
+      continuation?()
+  
+  process: (file, data, cursor) ->
+    fullPath = pathUtils.join(@config.target, file)
+    origin = fs.readFileSync(fullPath , "utf8")
     updated = origin
-    j++
     for key of data
-      updated = updated.replace(key, data[key])
-      unless origin is updated
-        fs.writeFileSync file, updated, "utf8"
-        friendlyFilename = file.replace(target, "")
-        cursor.magenta().write(" * ").write("Replacing ").yellow().write(key).reset().write(" with ").yellow().write(data[key]).reset().write(" in ").blue().write(friendlyFilename).reset().write "\n"
-        i++
-    content = fs.readFileSync(file, "utf8").toString()
-    if i is 0
-      cursor.white().write("Nothing to update in " + file).reset().write "\n"
+      newUpdated = updated.replace(key, data[key])
+      if newUpdated isnt updated
+        updated = newUpdated
+        cursor?.magenta().write(" * Replacing ")
+               .yellow().write(key)
+               .reset().write(" with ")
+               .yellow().write(data[key])
+               .reset().write(" in ")
+               .blue().write(file)
+               .reset().write "\n"
+
+    if origin isnt updated
+      fs.writeFileSync fullPath , updated, "utf8"
     else
-      i = 0
-    cursor.green().write("Parsing done in ").blue().write(target).reset().write "\n"  if j is SiteParser.filesToParse.length
-
-SiteParser::prepareData = (target, excludeFileList) ->
-  fs = require("fs")
-  dir = fs.readdirSync(target)
-  SiteParser.dirs[0] = target
-  SiteParser::walkThrought dir, target
-  SiteParser.dirs.forEach (dir) ->
-    SiteParser::indexDir fs.readdirSync(dir), dir, excludeFileList
-
-SiteParser::walkThrought = (dir, path) ->
-  fs = require("fs")
-  stats = undefined
-  i = SiteParser.dirs.length
-  j = 0
-  foundDirs = new Array()
-  dir.forEach (file) ->
-    if fs.lstatSync(path + file).isDirectory()
-      SiteParser.dirs[i] = path + file
-      j++
-
-  if j > 0
-    foundDirs.forEach (foundDir) ->
-      SiteParser::walkThrought fs.readdirSync(foundDir), path + foundDir
-  else
-    true
-
-SiteParser::indexDir = (dir, path, excludeFileList) ->
-  i = SiteParser.filesToParse.length
-  path = path.slice(0, -1) if path.charAt(path.length - 1) is "/"
-
-  dir.forEach (file) ->
-    includable = false
-    if file.substr(-5) is ".html"
-      includable = true
-    else
-      if file.substr(-4) is ".htm"
-        includable = true
-
-    for j of excludeFileList
-      i++ if file is excludeFileList[i]
-      includable = false if file is excludeFileList[j]
-
-    SiteParser.filesToParse.push path + "/" + file  if includable
+      cursor?.white().write("Nothing to update in " + file)
+             .reset().write "\n"
+    cursor?.green().write("Parsing done in ")
+           .blue().write(@config.target)
+           .reset().write "\n"
 
 module.exports = SiteParser
