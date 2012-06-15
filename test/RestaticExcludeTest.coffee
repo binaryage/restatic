@@ -8,7 +8,6 @@ fs = require("fs")
 describe "SiteParser", ->
     it "should be able to parse exclude file as is defined in config", (done) ->
         cmd = "./bin/restatic -s " + source + " -t " + target + " -c " + config_file
-        console.log cmd
         exec cmd, ->
             targetFile = fs.readFileSync(target + "/index.html", 'utf-8')
             sourceFile = fs.readFileSync(target + "/index.html", 'utf-8')
