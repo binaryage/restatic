@@ -44,35 +44,35 @@ env = new Environment(options)
 
 printFetchInfo = (config) ->
   config.cursor?.
-    green().write("Restatic started fetching data from spreadsheet defined in ")
-    .blue().write(config.source + "restatic.json")
-    .reset().write(" to ")
-    .blue().write(config.target)
-    .reset().write("\n")
+    green().write("Restatic started fetching data from spreadsheet defined in ").
+    blue().write(config.source + "restatic.json").
+    reset().write(" to ").
+    blue().write(config.target).
+    reset().write("\n")
 
 printProcessInfo = (config) ->
   config.cursor?.
-    green().write("Restatic started parsing html files from ")
-    .blue().write(config.source)
-    .reset().write(" to ")
-    .blue().write(config.target)
-    .green().write(" using ")
-    .blue().write(config.extractorName)
-    .reset().write("\n")
+    green().write("Restatic started parsing html files from ").
+    blue().write(config.source).
+    reset().write(" to ").
+    blue().write(config.target).
+    green().write(" using ").
+    blue().write(config.extractorName).
+    reset().write("\n")
 
 printDefaultInfo = (config) ->
   config.cursor?.
-    green().write("Restatic started parsing html files from ")
-    .blue().write(config.source)
-    .reset().write(" to ")
-    .blue().write(config.target)
-    .reset().write("\n")
+    green().write("Restatic started parsing html files from ").
+    blue().write(config.source).
+    reset().write(" to ").
+    blue().write(config.target).
+    reset().write("\n")
 
 printErrors = (config, errors) ->
-  _.each errors, (error) ->
-    cursor
-      .red().write(error)
-      .reset().write("\n")
+  for error in errors
+    cursor.
+      red().write(error).
+      reset().write("\n")
 
 ##########################################################################################
 # main logic
