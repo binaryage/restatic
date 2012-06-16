@@ -17,7 +17,7 @@ class SiteParser
     origin = fs.readFileSync(fullPath , "utf8")
     updated = origin
     for key of data
-      newUpdated = updated.replace(key, data[key])
+      newUpdated = updated.replace(@config.delimiters[0]+key+@config.delimiters[1], data[key])
       if newUpdated isnt updated
         updated = newUpdated
         @config.cursor?.magenta().write(" * Replacing ")

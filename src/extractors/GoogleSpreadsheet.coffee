@@ -7,7 +7,7 @@ class GoogleSpreadsheetDataExtractor
         item = JSON.parse(item)
         sheetName = item.feed.title.$t
         for entry in item.feed.entry when entry?
-          key = config.delimiters[0] + sheetName + "-" + entry.title.$t + config.delimiters[1]
+          key = sheetName + "-" + entry.title.$t
           value = entry.content.$t
           result[key] = value
       callback? result, config
