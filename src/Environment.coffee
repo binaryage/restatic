@@ -9,7 +9,7 @@ defaultConfig =
   source: "./_site"
   target: "./_restatic"
   extractor: "GoogleSpreadsheet"
-  delimiters: ["/-", "-/"]
+  delimiters: "/-(.+?)-/" # may be an array of regexps
   extractorExts: ["js", "coffee"]
   extractorsLocation: path.join(__dirname, "extractors")
   dataFile: "data.json"
@@ -32,6 +32,9 @@ class Environment
     
     # resolve extractor location
     @config.extractorPath = @resolveExtractorPath()
+    
+    # turn delimiters into an array
+    @config.delimiters = [].concat @config.delimiters
     
   loadConfigFile: (configPath, sourceDir) ->
     # first: try raw configPath

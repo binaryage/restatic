@@ -3,7 +3,6 @@ googleSpreadsheet = new GoogleSpreadsheet()
 
 config =
   key: "0AtkoCAIRJ7BPdGM2Y2tYdV9XRXNsNVVrVnFPeFIwb0E"
-  delimiters: [ "/-", "-/" ]
 
 describe "GoogleSpreadsheet", ->
   it "should be able to extract data from spreadsheet and parse it", (done) ->

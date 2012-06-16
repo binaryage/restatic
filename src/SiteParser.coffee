@@ -16,19 +16,21 @@ class SiteParser
     fullPath = pathUtils.join(@config.target, file)
     origin = fs.readFileSync(fullPath , "utf8")
     updated = origin
-    for key of data
-      newUpdated = updated.replace(@config.delimiters[0]+key+@config.delimiters[1], data[key])
-      if newUpdated isnt updated
-        updated = newUpdated
+    for delimiter in @config.delimiters
+      re = new RegExp delimiter, "gm"
+      updated = updated.replace re, (match, key) =>
+        val = data[key]
+        return match unless val? # TODO: report this bailout in verbose mode?
         @config.cursor?.
           magenta().write(" * Replacing ").
-          yellow().write(key)
+          yellow().write(key).
           reset().write(" with ").
-          yellow().write(data[key]).
+          yellow().write(val).
           reset().write(" in ").
           blue().write(file).
           reset().write "\n"
-
+        val
+    
     if origin isnt updated
       fs.writeFileSync fullPath , updated, "utf8"
     else
