@@ -1,4 +1,4 @@
-GoogleSpreadsheet = require("../src/extractors/GoogleSpreadsheet.js")
+GoogleSpreadsheet = require("../src/extractors/GoogleSpreadsheet")
 googleSpreadsheet = new GoogleSpreadsheet()
 
 config =
