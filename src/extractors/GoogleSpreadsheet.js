@@ -1,9 +1,6 @@
-var ansi = require('ansi');
-var cursor = ansi(process.stdout);
-
 var GoogleSpreadsheetDataExtractor = function () {};
 
-GoogleSpreadsheetDataExtractor.prototype.extract = function (config, callback, cursor) {
+GoogleSpreadsheetDataExtractor.prototype.extract = function (config, callback) {
     this.mineData(config.apiKey, function (data) {
         var delimiters = config.delimiters;
 
@@ -23,7 +20,7 @@ GoogleSpreadsheetDataExtractor.prototype.extract = function (config, callback, c
             }
         }
         callback(result, config);
-    }, cursor);
+    }, config.cursor);
 }
  
 GoogleSpreadsheetDataExtractor.prototype.mineData = function (key, callback, cursor) {

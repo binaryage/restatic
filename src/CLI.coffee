@@ -43,18 +43,16 @@ env = new Environment(options)
 # helper UI
 
 printFetchInfo = (config) ->
-  return unless env.config.verbose
-  cursor
-    .green().write("Restatic started fetching data from spreadsheet defined in ")
+  config.cursor?.
+    green().write("Restatic started fetching data from spreadsheet defined in ")
     .blue().write(config.source + "restatic.json")
     .reset().write(" to ")
     .blue().write(config.target)
     .reset().write("\n")
 
 printProcessInfo = (config) ->
-  return unless env.config.verbose
-  cursor
-    .green().write("Restatic started parsing html files from ")
+  config.cursor?.
+    green().write("Restatic started parsing html files from ")
     .blue().write(config.source)
     .reset().write(" to ")
     .blue().write(config.target)
@@ -63,9 +61,8 @@ printProcessInfo = (config) ->
     .reset().write("\n")
 
 printDefaultInfo = (config) ->
-  return unless env.config.verbose
-  cursor
-    .green().write("Restatic started parsing html files from ")
+  config.cursor?.
+    green().write("Restatic started parsing html files from ")
     .blue().write(config.source)
     .reset().write(" to ")
     .blue().write(config.target)
@@ -83,7 +80,7 @@ printErrors = (config, errors) ->
 niceJSON = (obj) ->
   JSON.stringify(obj, null, 4)
 
-effectiveCursor = cursor if env.config.verbose
+env.config.cursor = cursor if env.config.verbose
 console.log("effective config:\n", env.config) if env.config.verbose
 
 # check the situation
@@ -109,14 +106,14 @@ switch env.config.mode
         fs.writeFile(config.output, niceJSON(data))
       else
         console.log niceJSON(data)
-    extractor.extract env.config, presentOutput, effectiveCursor
+    extractor.extract env.config, presentOutput
   when "process"
     printProcessInfo env.config
     data = env.loadData
-    # TODO allow loading json from pipe
-    parser.parse data, effectiveCursor
+    # TODO allow loading json from stdin
+    parser.parse data
   else # fetch + process 
     printDefaultInfo env.config
     processOutput = (data, config) ->
-        parser.parse data, effectiveCursor
-    extractor.extract env.config, processOutput, effectiveCursor
+        parser.parse data
+    extractor.extract env.config, processOutput
