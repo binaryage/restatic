@@ -112,8 +112,8 @@ switch env.config.mode
     data = env.loadData
     # TODO allow loading json from stdin
     parser.parse data
-  else # fetch + process 
+  else # fetch + process
     printDefaultInfo env.config
     processOutput = (data, config) ->
-        parser.parse data
+      parser.parse data
     extractor.extract env.config, processOutput
