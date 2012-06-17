@@ -3,7 +3,6 @@ fs = require("fs")
 
 source = "./test/demo_data/source_folder_example"
 target = "./test/demo_data/target_folder_example"
-config_file = "./test/demo_data/restatic.json"
 
 describe "Restatic", ->
   it "runs and generates correct output", (done) ->
