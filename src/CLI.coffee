@@ -115,5 +115,9 @@ switch env.config.mode
   else # fetch + process
     printDefaultInfo env.config
     processOutput = (data, config) ->
+      env.config.cursor?.
+        green().write("Received data: ").
+        white().write(niceJSON(data)).
+        reset().write("\n")
       parser.parse data
     extractor.extract env.config, processOutput

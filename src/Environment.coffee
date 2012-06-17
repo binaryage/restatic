@@ -14,6 +14,7 @@ defaultConfig =
   extractorsLocation: path.join(__dirname, "extractors")
   dataFile: "data.json"
   includablePaths: ".*\.htm?"
+  excludeFileList: []
   toBeDeleted: [
     ".git"
     ".gitignore"
@@ -23,18 +24,14 @@ defaultConfig =
   ]
 
 class Environment
-  constructor: (options) ->
+  constructor: (options = {}) ->
     # try to load config file from the disk (silently)
     fileConfig = @loadConfigFile(options.config, options.source)
     
     # compose effective config, command-line options have highest priority
     @config = _.extend({}, defaultConfig, fileConfig, options)
     
-    # resolve extractor location
-    @config.extractorPath = @resolveExtractorPath()
-    
-    # turn delimiters into an array
-    @config.delimiters = [].concat @config.delimiters
+    @sanitize()
     
   loadConfigFile: (configPath, sourceDir) ->
     # first: try raw configPath
@@ -87,6 +84,12 @@ class Environment
     # TODO: this is unexpected behavior, we should not delete stuff without user's agreement
     for file in @config.toBeDeleted
       rimraf.sync path.join(@config.target, file)
+      
+  sanitize: ->
+    # resolve extractor location
+    @config.extractorPath = @resolveExtractorPath()
+    
+    @config.delimiters = [].concat @config.delimiters
     
   check: ->
     errors = []
