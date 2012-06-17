@@ -15,13 +15,6 @@ defaultConfig =
   dataFile: "data.json"
   includablePaths: ".*\.htm?"
   excludeFileList: []
-  toBeDeleted: [
-    ".git"
-    ".gitignore"
-    "_site"
-    ".DS_Store"
-    "restatic.json"
-  ]
 
 class Environment
   constructor: (options = {}) ->
@@ -80,10 +73,6 @@ class Environment
     rimraf.sync @config.target
     fs.mkdirSync @config.target, 0o777
     wrench.copyDirSyncRecursive @config.source, @config.target
-
-    # TODO: this is unexpected behavior, we should not delete stuff without user's agreement
-    for file in @config.toBeDeleted
-      rimraf.sync path.join(@config.target, file)
       
   sanitize: ->
     # resolve extractor location
