@@ -26,8 +26,8 @@ class GoogleSpreadsheetDataExtractor
 
       config.cursor?.
         cyan().write(" @ Fetching ").
-        blue().write("http://" + options.host + ":" + options.port + options.path).
-        reset()
+        blue().write("http://#{options.host}:#{options.port}#{options.path}").
+        reset().write "\n"
         
       http.get options, (res) ->
         res.setEncoding "utf-8"
