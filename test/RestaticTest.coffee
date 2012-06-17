@@ -7,7 +7,7 @@ config_file = "./test/demo_data/restatic.json"
 
 describe "SiteParser", ->
   it "should be able to parse data correctly to demo target", (done) ->
-    cmd = "./bin/restatic -s " + source + " -t " + target + " -c " + config_file
+    cmd = "./bin/restatic -s " + source + " -t " + target
     exec cmd, ->
       original = fs.readFileSync(source + "/snippet.html", "utf-8")
       generated = fs.readFileSync(target + "/snippet.html", "utf-8")
