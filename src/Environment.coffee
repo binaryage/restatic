@@ -13,8 +13,8 @@ defaultConfig =
   extractorExts: ["js", "coffee"]
   extractorsLocation: path.join(__dirname, "extractors")
   dataFile: "data.json"
-  includablePaths: ".*\.htm?"
-  excludeFileList: []
+  includablePaths: ".*\\.htm?" # may be an array of regexps
+  excludablePaths: [] # may be an array of regexps
 
 class Environment
   constructor: (options = {}) ->
@@ -78,7 +78,15 @@ class Environment
     # resolve extractor location
     @config.extractorPath = @resolveExtractorPath()
     
-    @config.delimiters = [].concat @config.delimiters
+    filterEmptyValues = (a) ->
+      x for x in a when x
+      
+    turnIntoArray = (v) ->
+      [].concat v
+    
+    @config.delimiters = filterEmptyValues turnIntoArray @config.delimiters
+    @config.includablePaths = filterEmptyValues turnIntoArray @config.includablePaths
+    @config.excludablePaths = filterEmptyValues turnIntoArray @config.excludablePaths
     
   check: ->
     errors = []
