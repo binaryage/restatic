@@ -18,7 +18,7 @@ class GoogleSpreadsheetDataExtractor
     
     download = (sheet) ->
       rawData = ""
-      link = "/feeds/cells/" + config.apiKey + "/" + sheet + "/public/values?alt=json"
+      link = "/feeds/cells/#{config.apiKey}/#{sheet}/public/values?alt=json"
       options =
         host: "spreadsheets.google.com"
         port: 80
